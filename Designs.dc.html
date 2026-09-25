@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&amp;family=Cormorant+Garamond:wght@500&amp;family=Jost:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#FBF8F1;}
+*{box-sizing:border-box;}
+a{color:#8C6418;}
+a:hover{color:#1E1A14;}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#FBF8F1;color:#1E1A14;font-family:'Jost',sans-serif;padding:48px 24px 80px;">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:40px;">
+      <img src="assets/ccs-mark.png" alt="" style="height:44px;width:auto;"></img>
+      <span style="font-family:'Cinzel',serif;font-weight:600;font-size:16px;letter-spacing:.14em;">CANADA CASTING STUDIO</span>
+    </div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:52px;line-height:1.05;margin:0 0 10px;">Design directions</h1>
+    <p style="font-size:17px;line-height:1.6;color:#6B6152;margin:0 0 40px;max-width:640px;">Three complete prototypes of the registration platform. Each covers the full journey, from landing page to dashboard, and has its own landing and onboarding variants in the top-right corner.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:24px;">
+      <sc-for list="{{ designs }}" as="d" hint-placeholder-count="3">
+        <a href="{{ d.href }}" style="display:flex;flex-direction:column;text-decoration:none;color:#1E1A14;background:#fff;border:1px solid #E6DDCB;border-radius:14px;overflow:hidden;" style-hover="border-color:#C8942A;box-shadow:0 14px 34px rgba(140,100,24,.12);">
+          <div style="position:relative;width:100%;aspect-ratio:16 / 10;overflow:hidden;background:{{ d.bg }};border-bottom:1px solid #E6DDCB;">
+            <iframe src="{{ d.href }}" title="{{ d.title }}" tabIndex="-1" style="position:absolute;top:0;left:0;width:1440px;height:900px;border:0;transform:scale({{ scale }});transform-origin:0 0;pointer-events:none;"></iframe>
+          </div>
+          <div style="padding:22px 24px 24px;display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:.2em;color:#8C6418;">{{ d.n }}</span>
+              <span style="width:14px;height:14px;border-radius:50%;background:{{ d.swatch }};border:1px solid #DCD2BE;"></span>
+            </div>
+            <div style="font-size:22px;font-weight:500;">{{ d.title }}</div>
+            <div style="font-size:15px;line-height:1.55;color:#6B6152;">{{ d.desc }}</div>
+            <div style="font-size:14px;color:#8C6418;margin-top:6px;">Open prototype →</div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { w: 1200 };
+  componentDidMount() { this.onR = () => this.setState({ w: window.innerWidth }); this.onR(); window.addEventListener('resize', this.onR); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onR); }
+  renderVals() {
+    const w = this.state.w, cols = Math.max(1, Math.floor((Math.min(w, 1328) - 48 + 24) / (360 + 24)));
+    const cardW = (Math.min(w, 1328) - 48 - (cols - 1) * 24) / cols;
+    return {
+      scale: (cardW / 1440).toFixed(4),
+      designs: [
+        { n:'DESIGN 1', title:'Warm ivory', href:'Canada%20Casting%20Studio.dc.html', bg:'#FBF8F1', swatch:'#FBF8F1', desc:'Editorial serif headlines on warm ivory, gold accents taken from the logo sheet.' },
+        { n:'DESIGN 2', title:'Clean', href:'Design%202%20Clean.dc.html', bg:'#FFFFFF', swatch:'#FFFFFF', desc:'Crisp white, cool neutrals and one sans-serif typeface. Rounded cards and a focused, one-step-at-a-time onboarding.' },
+        { n:'DESIGN 3', title:'Dark premium', href:'Design%203%20Dark.dc.html', bg:'#0E0C09', swatch:'#0E0C09', desc:'Near-black and gold drawn from the poster. Sharp edges, serif display type and scene-by-scene onboarding.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

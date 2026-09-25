@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="min-height:100%;background:#FFFFFF;color:#111318;font-family:'Manrope',sans-serif;">
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:{{ headPad }};border-bottom:1px solid #E6E8EC;background:#FFFFFF;position:sticky;top:0;z-index:6;">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+      <img src="assets/ccs-mark.png" alt="" style="height:30px;width:auto;"></img>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;letter-spacing:.12em;white-space:nowrap;">CANADA CASTING STUDIO</span><span style="width:1px;height:20px;background:#D7DAE0;margin:0 6px;"></span></sc-if>
+      <span style="font-size:14px;color:#5B6170;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ modeLabel }} <strong style="font-weight:500;color:#111318;">{{ app.roleCfg.name }}</strong></span>
+    </div>
+    <button onClick="{{ app.saveExit }}" style="background:none;border:1px solid #C9CDD5;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;white-space:nowrap;">Save &amp; exit</button>
+  </header>
+
+  <sc-if value="{{ vA }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;align-items:stretch;">
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <aside style="flex:0 0 300px;background:#F4F5F7;border-right:1px solid #E6E8EC;">
+          <div style="position:sticky;top:67px;padding:36px 28px;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.22em;color:#8C6418;">REGISTRATION DOSSIER</div>
+            <div style="font-family:'Manrope',sans-serif;font-size:30px;font-weight:500;line-height:1.1;margin:6px 0 22px;">{{ app.roleCfg.name }}</div>
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="7">
+              <button onClick="{{ app.toStep }}" data-step="{{ s.i }}" style="display:flex;gap:14px;align-items:flex-start;text-align:left;background:{{ s.rowBg }};border:none;border-radius:10px;padding:10px 10px;cursor:{{ s.cursor }};color:#111318;">
+                <span style="flex:none;width:28px;height:28px;border-radius:50%;border:1px solid {{ s.dotBd }};background:{{ s.dotBg }};color:{{ s.dotFg }};font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;">{{ s.mark }}</span>
+                <span style="display:flex;flex-direction:column;gap:2px;padding-top:3px;">
+                  <span style="font-size:15px;font-weight:{{ s.weight }};color:{{ s.labelFg }};">{{ s.title }}</span>
+                  <span style="font-size:12px;color:{{ s.subFg }};">{{ s.sub }}</span>
+                </span>
+              </button>
+            </sc-for>
+            <div style="margin-top:22px;border-top:1px solid #E6E8EC;padding-top:16px;font-size:13px;line-height:1.55;color:#5B6170;">Progress saves at every step. Payment comes after review.</div>
+          </div>
+        </aside>
+      </sc-if>
+      <main style="flex:1 1 auto;min-width:0;">
+        <div style="max-width:800px;margin:0 auto;padding:{{ mainPad }};">
+          <sc-if value="{{ narrow }}">
+            <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:22px;padding-bottom:4px;">
+              <sc-for list="{{ steps }}" as="s">
+                <button onClick="{{ app.toStep }}" data-step="{{ s.i }}" style="flex:none;width:32px;height:32px;border-radius:50%;border:1px solid {{ s.dotBd }};background:{{ s.dotBg }};color:{{ s.dotFg }};font-size:12px;cursor:{{ s.cursor }};">{{ s.mark }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="font-family:'Manrope',sans-serif;font-size:12px;letter-spacing:.22em;color:#8C6418;margin-bottom:10px;">STEP {{ cur.n }} OF 07</div>
+          <h1 style="font-family:'Manrope',sans-serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 10px;">{{ cur.title }}</h1>
+          <p style="font-size:16px;line-height:1.6;color:#5B6170;margin:0 0 30px;max-width:600px;">{{ cur.intro }}</p>
+          <dc-import name="D2 Step" app="{{ app }}" step-key="{{ cur.key }}" hint-size="100%,500px"></dc-import>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid #E6E8EC;">
+            <button onClick="{{ app.back }}" style="background:none;border:1px solid #C9CDD5;border-radius:10px;padding:13px 20px;font-size:15px;cursor:pointer;">Back</button>
+            <button onClick="{{ app.saveExit }}" style="background:none;border:none;color:#8C6418;text-decoration:underline;text-underline-offset:3px;padding:13px 4px;font-size:14px;cursor:pointer;">Save and continue later</button>
+            <div style="flex:1;"></div>
+            <button onClick="{{ app.next }}" style="background:{{ nextBg }};color:{{ nextFg }};border:none;border-radius:10px;padding:14px 24px;font-size:15px;font-weight:500;cursor:pointer;">{{ nextLabel }}</button>
+          </div>
+          <sc-if value="{{ hasNextHint }}"><div style="text-align:right;font-size:13px;color:#5B6170;margin-top:10px;">Next: {{ nextTitle }}</div></sc-if>
+        </div>
+      </main>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ vB }}">
+    <div style="border-bottom:1px solid #E6E8EC;background:#fff;">
+      <div style="max-width:1000px;margin:0 auto;padding:{{ barPad }};">
+        <div style="display:flex;gap:4px;">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="7">
+            <button onClick="{{ app.toStep }}" data-step="{{ s.i }}" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;background:none;border:none;padding:0;cursor:{{ s.cursor }};text-align:left;">
+              <span style="display:block;height:4px;border-radius:2px;background:{{ s.segBg }};"></span>
+              <sc-if value="{{ wideB }}"><span style="font-size:12px;color:{{ s.labelFg }};font-weight:{{ s.weight }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.short }}</span></sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:680px;margin:0 auto;padding:{{ mainPadB }};">
+      <div style="display:flex;justify-content:space-between;gap:10px;font-size:13px;color:#5B6170;margin-bottom:14px;">
+        <span>Step {{ cur.stepNo }} of 7</span>
+        <sc-if value="{{ cur.reused }}"><span style="color:#2E6443;">Reused from your profile</span></sc-if>
+      </div>
+      <h1 style="font-weight:500;font-size:{{ h1b }};line-height:1.15;margin:0 0 10px;letter-spacing:-.01em;">{{ cur.title }}</h1>
+      <p style="font-size:16px;line-height:1.6;color:#5B6170;margin:0 0 30px;">{{ cur.intro }}</p>
+      <dc-import name="D2 Step" app="{{ app }}" step-key="{{ cur.key }}" hint-size="100%,500px"></dc-import>
+    </div>
+    <div style="position:sticky;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid #E6E8EC;z-index:5;">
+      <div style="max-width:680px;margin:0 auto;padding:14px 20px {{ barBottom }};display:flex;gap:10px;align-items:center;">
+        <button onClick="{{ app.back }}" style="background:none;border:1px solid #C9CDD5;border-radius:999px;padding:12px 18px;font-size:14px;cursor:pointer;">Back</button>
+        <button onClick="{{ app.saveExit }}" style="background:none;border:none;color:#5B6170;padding:12px 6px;font-size:14px;cursor:pointer;">Save for later</button>
+        <div style="flex:1;"></div>
+        <button onClick="{{ app.next }}" style="background:{{ nextBg }};color:{{ nextFg }};border:none;border-radius:999px;padding:13px 22px;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;">{{ nextLabelShort }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ vC }}">
+    <div style="max-width:880px;margin:0 auto;padding:{{ mainPadC }};">
+      <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between;margin-bottom:28px;">
+        <div>
+          <div style="font-family:'Manrope',sans-serif;font-size:12px;letter-spacing:.22em;color:#8C6418;margin-bottom:8px;">YOUR PROFILE, SCENE BY SCENE</div>
+          <h1 style="font-family:'Manrope',sans-serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0;">{{ app.roleCfg.name }}</h1>
+        </div>
+        <div style="min-width:200px;flex:0 1 260px;">
+          <div style="font-size:13px;color:#5B6170;margin-bottom:8px;text-align:right;">{{ doneCount }} of 7 scenes complete</div>
+          <div style="height:6px;background:#EEF0F3;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ pct }};background:#C8942A;"></div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="7">
+          <div id="{{ s.anchor }}" style="background:{{ s.cardBg }};border:1px solid {{ s.cardBd }};border-radius:18px;overflow:hidden;">
+            <button onClick="{{ app.toStep }}" data-step="{{ s.i }}" style="width:100%;display:flex;gap:16px;align-items:center;text-align:left;background:none;border:none;padding:{{ cardPad }};cursor:{{ s.cursor }};color:#111318;">
+              <span style="flex:none;font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.16em;color:{{ s.sceneFg }};width:66px;">SCENE {{ s.n }}</span>
+              <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+                <span style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:500;color:{{ s.labelFg }};">{{ s.title }}</span>
+                <sc-if value="{{ s.showSummary }}"><span style="font-size:13px;color:#5B6170;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.summary }}</span></sc-if>
+              </span>
+              <span style="flex:none;font-size:12px;padding:4px 10px;border-radius:999px;background:{{ s.tagBg }};color:{{ s.tagFg }};">{{ s.tag }}</span>
+            </button>
+            <sc-if value="{{ s.open }}">
+              <div style="padding:{{ openPad }};border-top:1px solid #EEF0F3;">
+                <p style="font-size:15px;line-height:1.6;color:#5B6170;margin:20px 0 24px;">{{ s.intro }}</p>
+                <dc-import name="D2 Step" app="{{ app }}" step-key="{{ s.key }}" hint-size="100%,400px"></dc-import>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:28px;">
+                  <button onClick="{{ app.saveExit }}" style="background:none;border:none;color:#8C6418;text-decoration:underline;text-underline-offset:3px;padding:12px 0;font-size:14px;cursor:pointer;">Save and continue later</button>
+                  <div style="flex:1;"></div>
+                  <button onClick="{{ app.next }}" style="background:{{ nextBg }};color:{{ nextFg }};border:none;border-radius:10px;padding:14px 24px;font-size:15px;font-weight:500;cursor:pointer;">{{ nextLabelC }}</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="height:90px;"></div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidUpdate(prev) {
+    const a = this.props.app, pa = prev.app;
+    if (!a || !pa || a.ov !== 'C' || a.role.step === pa.role.step) return;
+    const el = document.getElementById('scene-' + a.role.step); if (!el) return;
+    let sc = el.parentElement;
+    while (sc && !(sc.scrollHeight > sc.clientHeight + 4 && /(auto|scroll)/.test(getComputedStyle(sc).overflowY))) sc = sc.parentElement;
+    const top = el.getBoundingClientRect().top;
+    if (sc) sc.scrollTop += top - sc.getBoundingClientRect().top - 70; else window.scrollTo(0, window.scrollY + top - 80);
+  }
+  renderVals() {
+    const a = this.props.app || {}, n = !!a.narrow, ov = a.ov || 'A';
+    const role = a.role || { step:0, maxStep:0 }, steps0 = a.steps || [];
+    const summarize = st => {
+      if (st.key === 'review') return role.confirm ? 'Confirmed' : 'Check and confirm';
+      const slots = a.slotsFor ? a.slotsFor(st.key) : [];
+      const vals = (a.fieldsFor ? a.fieldsFor(st.key) : []).map(f => a.getVal(f.k)).filter(v => v && (!Array.isArray(v) || v.length)).slice(0, 3).map(v => Array.isArray(v) ? v.join(', ') : v);
+      if (st.key === 'contact') vals.unshift((a.profile.email || '') + (a.profile.phoneVerified ? ' · mobile verified' : ''));
+      if (slots.length) { const m = (s) => ((s.scope === 'p' ? a.profile.media : role.media) || {})[s.id]; vals.push(slots.filter(m).length + ' of ' + slots.length + ' uploads'); }
+      return vals.join(' · ') || 'Not started';
+    };
+    const steps = steps0.map(s => {
+      const cur = s.state === 'current', done = s.state === 'done', part = s.state === 'partial', reach = s.i <= role.maxStep || role.editing;
+      return { ...s, anchor:'scene-' + s.i,
+        mark:done ? '✓' : part ? '!' : String(s.i + 1),
+        dotBg:cur ? '#111318' : done ? '#2E6443' : part ? '#F6E4DE' : '#FFFFFF', dotFg:cur || done ? '#FFFFFF' : part ? '#9A3F24' : '#868C9A', dotBd:cur ? '#111318' : done ? '#2E6443' : part ? '#E3B8A6' : '#D7DAE0',
+        rowBg:cur ? '#FFFFFF' : 'transparent', weight:cur ? 500 : 400, labelFg:reach ? '#111318' : '#868C9A',
+        sub:cur ? 'In progress' : done ? (s.reused ? 'Reused from profile' : 'Complete') : part ? s.missCount + ' item' + (s.missCount > 1 ? 's' : '') + ' needed' : s.reused ? 'On file' : 'Not started',
+        subFg:part ? '#9A3F24' : done ? '#2E6443' : '#5B6170', cursor:reach ? 'pointer' : 'default',
+        segBg:done ? '#2E6443' : cur ? '#C8942A' : part ? '#D98B6C' : '#E6E8EC',
+        open:cur, showSummary:!cur, summary:summarize(s),
+        cardBg:cur ? '#fff' : reach ? '#FAFBFC' : '#F4F5F7', cardBd:cur ? '#C8942A' : '#E6E8EC', sceneFg:cur || done ? '#8C6418' : '#9BA1AE',
+        tag:cur ? 'Now' : done ? 'Complete' : part ? s.missCount + ' needed' : s.reused ? 'On file' : 'Up next',
+        tagBg:cur ? '#111318' : done ? '#E4F0E7' : part ? '#F6E4DE' : '#F4F5F7', tagFg:cur ? '#FFFFFF' : done ? '#2E6443' : part ? '#9A3F24' : '#5B6170' };
+    });
+    const cur = { ...(steps[role.step] || {}), stepNo:role.step + 1 };
+    const last = role.step === 6, blocked = last && cur.missCount > 0;
+    const pay = role.renewing ? 'Continue to renewal payment' : 'Continue to payment';
+    const nextLabel = last ? (role.editing ? 'Save changes' : pay) : 'Save and continue';
+    const doneCount = steps.filter(s => s.state === 'done').length;
+    return {
+      app:a, wide:!n, narrow:n, vA:ov === 'A', vB:ov === 'B', vC:ov === 'C', wideB:!n,
+      modeLabel:role.editing ? 'Updating' : role.renewing ? 'Renewing' : 'Registering as',
+      headPad:n ? '12px 16px' : '14px 32px', mainPad:n ? '24px 18px 110px' : '48px 48px 120px', mainPadB:n ? '28px 20px 40px' : '48px 20px 60px', mainPadC:n ? '24px 14px 40px' : '48px 32px 60px', barPad:n ? '14px 16px' : '18px 20px', barBottom:n ? '14px' : '70px',
+      cardPad:n ? '16px' : '20px 24px', openPad:n ? '0 16px 20px' : '0 24px 28px',
+      h1:n ? '36px' : '42px', h1b:n ? '28px' : '36px', steps, cur,
+      nextLabel, nextLabelShort:last ? (role.editing ? 'Save changes' : 'Continue to payment') : 'Continue', nextLabelC:last ? nextLabel : 'Save and continue',
+      nextBg:blocked ? '#E6E8EC' : '#111318', nextFg:blocked ? '#868C9A' : '#FFFFFF',
+      hasNextHint:!last && !n, nextTitle:(steps[role.step + 1] || {}).title || '',
+      doneCount, pct:Math.round(doneCount / 7 * 100) + '%'
+    };
+  }
+}
+</script>
+</body>
+</html>

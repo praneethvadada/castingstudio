@@ -1,22 +1,19 @@
-Canada Casting Studio – prototype
+Canada Casting Studio – design prototypes
 
-Open "Canada Casting Studio.dc.html" through a local web server (browsers block
-loading the linked screen files when opened directly from disk).
+START HERE: Designs.dc.html  (opening page with Design 1, 2 and 3)
 
-Easiest ways:
-  • Mac/Linux terminal, in this folder:   python3 -m http.server 8000
-  • Windows (with Python):               py -m http.server 8000
-  • Or with Node:                         npx serve .
-Then visit:  http://localhost:8000/Canada%20Casting%20Studio.dc.html
+These files must be opened through a local web server (browsers block the
+linked screen files when a page is opened directly from disk).
 
-VS Code users: right-click the file → "Open with Live Server".
+  Mac/Linux:  python3 -m http.server 8000
+  Windows:    py -m http.server 8000
+  Node:       npx serve .
+  VS Code:    right-click Designs.dc.html → "Open with Live Server"
 
-Files
-  Canada Casting Studio.dc.html  – main prototype (state, routing, variant switcher)
-  CCS Public.dc.html             – landing A/B/C, sign up, log in, register as, terms, resume
-  CCS Onboarding.dc.html         – onboarding layouts A/B/C
-  CCS Step.dc.html               – step fields, uploads, verification, review
-  CCS Checkout.dc.html           – payment, submitted, verification, activated
-  CCS App.dc.html                – home, registrations, casting calls, messages
-  assets/                        – logo mark and poster image
-  support.js                     – runtime
+Then visit: http://localhost:8000/Designs.dc.html
+
+Design 1 (Warm ivory):   Canada Casting Studio.dc.html + CCS *.dc.html
+Design 2 (Clean):        Design 2 Clean.dc.html + D2 *.dc.html
+Design 3 (Dark premium): Design 3 Dark.dc.html + D3 *.dc.html
+assets/   logo mark and poster image
+support.js  runtime (required)

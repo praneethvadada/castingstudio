@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFFFFF"></rect><circle cx="50" cy="50" r="22" fill="none" stroke="#C8942A" stroke-width="7"></circle></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#EEF0F3;}
+*{box-sizing:border-box;}
+a{color:#8C6418;text-decoration:underline;text-underline-offset:3px;}
+a:hover{color:#111318;}
+input,select,textarea,button{font:inherit;color:inherit;}
+input:focus,select:focus,textarea:focus{outline:2px solid #C8942A;outline-offset:1px;}
+::placeholder{color:#9BA1AE;}
+@keyframes ccsSpin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#EEF0F3;font-family:'Manrope',sans-serif;color:#111318;display:flex;justify-content:center;align-items:flex-start;padding:{{ outerPad }};">
+  <div ref="{{ frameRef }}" style="width:100%;max-width:{{ frameMax }};height:{{ frameH }};overflow-y:{{ frameOverflow }};overflow-x:hidden;background:#FFFFFF;border-radius:{{ frameRadius }};border:{{ frameBorder }};position:relative;">
+    <sc-if value="{{ isPublic }}" hint-placeholder-val="{{ true }}">
+      <dc-import name="D2 Public" app="{{ app }}" hint-size="100%,900px"></dc-import>
+    </sc-if>
+    <sc-if value="{{ isOnboard }}">
+      <dc-import name="D2 Onboarding" app="{{ app }}" hint-size="100%,900px"></dc-import>
+    </sc-if>
+    <sc-if value="{{ isCheckout }}">
+      <dc-import name="D2 Checkout" app="{{ app }}" hint-size="100%,900px"></dc-import>
+    </sc-if>
+    <sc-if value="{{ isApp }}">
+      <dc-import name="D2 App" app="{{ app }}" hint-size="100%,900px"></dc-import>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ toast }}">
+    <div style="position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#111318;color:#FFFFFF;padding:12px 18px;border-radius:10px;font-size:14px;z-index:60;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(30,26,20,.25);max-width:calc(100vw - 32px);">
+      <span style="width:8px;height:8px;border-radius:50%;background:#C8942A;flex:none;"></span>
+      <span>{{ toast }}</span>
+    </div>
+  </sc-if>
+
+  <div style="position:fixed;top:12px;right:12px;z-index:80;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center;background:#111318;color:#E6E8EC;padding:8px 10px;border-radius:16px;box-shadow:0 10px 28px rgba(30,26,20,.28);font-size:12px;max-width:calc(100vw - 24px);">
+    <a href="Designs.dc.html" style="color:#C8942A;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-decoration:none;">← DESIGN 2</a>
+    <label style="display:flex;gap:6px;align-items:center;">
+      <span style="color:#9BA1AE;">Landing</span>
+      <select value="{{ lvCur }}" onChange="{{ pickLV }}" style="background:#23262E;border:1px solid #373C47;border-radius:10px;padding:6px 8px;color:#FFFFFF;font-size:12px;">
+        <option value="A">A · Centered</option>
+        <option value="B">B · Clean</option>
+        <option value="C">C · Cinematic</option>
+      </select>
+    </label>
+    <label style="display:flex;gap:6px;align-items:center;">
+      <span style="color:#9BA1AE;">Onboarding</span>
+      <select value="{{ ovCur }}" onChange="{{ pickOV }}" style="background:#23262E;border:1px solid #373C47;border-radius:10px;padding:6px 8px;color:#FFFFFF;font-size:12px;">
+        <option value="A">A · Sidebar steps</option>
+        <option value="B">B · Focus, one step</option>
+        <option value="C">C · Scenes, one page</option>
+      </select>
+    </label>
+  </div>
+
+  <div style="position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:70;max-width:calc(100vw - 20px);">
+    <sc-if value="{{ barOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:#111318;color:#E6E8EC;padding:8px 10px 8px 14px;border-radius:18px;font-size:12px;box-shadow:0 12px 32px rgba(30,26,20,.3);">
+        <span style="font-family:'JetBrains Mono',monospace;letter-spacing:.08em;color:#C8942A;">PROTOTYPE</span>
+        <select value="{{ screen }}" onChange="{{ jump }}" style="background:#23262E;border:1px solid #373C47;border-radius:10px;padding:6px 8px;color:#FFFFFF;font-size:12px;max-width:200px;">
+          <sc-for list="{{ jumpList }}" as="j">
+            <option value="{{ j.v }}">{{ j.l }}</option>
+          </sc-for>
+        </select>
+        <div style="display:flex;gap:4px;">
+          <sc-for list="{{ devOpts }}" as="o">
+            <button onClick="{{ setDevice }}" data-v="{{ o.v }}" style="border:none;cursor:pointer;height:26px;padding:0 9px;border-radius:7px;font-size:12px;background:{{ o.bg }};color:{{ o.fg }};">{{ o.l }}</button>
+          </sc-for>
+        </div>
+        <button onClick="{{ autofill }}" style="border:1px solid #373C47;background:transparent;color:#E6E8EC;cursor:pointer;height:26px;padding:0 9px;border-radius:7px;font-size:12px;">Autofill</button>
+        <button onClick="{{ reset }}" style="border:1px solid #373C47;background:transparent;color:#E6E8EC;cursor:pointer;height:26px;padding:0 9px;border-radius:7px;font-size:12px;">Reset</button>
+        <button onClick="{{ toggleBar }}" title="Hide" style="border:none;background:transparent;color:#9BA1AE;cursor:pointer;height:26px;width:22px;font-size:15px;">×</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ barClosed }}">
+      <button onClick="{{ toggleBar }}" style="border:none;background:#111318;color:#C8942A;cursor:pointer;padding:8px 14px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;">PROTOTYPE</button>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;landingVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;'A'|'B'|'C'&quot;}}">
+class Component extends DCLogic {
+  static CFG = (() => {
+    const PROVS = [['AB','Alberta'],['BC','British Columbia'],['MB','Manitoba'],['NB','New Brunswick'],['NL','Newfoundland and Labrador'],['NS','Nova Scotia'],['NT','Northwest Territories'],['NU','Nunavut'],['ON','Ontario'],['PE','Prince Edward Island'],['QC','Quebec'],['SK','Saskatchewan'],['YT','Yukon']];
+    const roles = [
+      { key:'principal', name:'Principal Actor', code:'PA', blurb:'Lead, supporting and speaking roles in film, series and commercials.' },
+      { key:'stunt', name:'Stunt Man', code:'ST', blurb:'Fights, falls, wire and driving work performed under a stunt coordinator.' },
+      { key:'background', name:'Background Artist', code:'BG', blurb:'Non-speaking scene work: crowds, passers-by and featured extras.' },
+      { key:'senior', name:'Senior Artist', code:'SR', blurb:'Roles written for mature performers, speaking and non-speaking.' },
+      { key:'double', name:'Body Double', code:'BD', blurb:'Stand-in and photo double work matched to a principal performer.' }
+    ];
+    const S = (id,label,kind,level,hint) => ({ id, label, kind, level, hint: hint || '' });
+    const req = {
+      principal: {
+        updated:'12 Sep 2026',
+        wardrobe:[S('w1','Everyday casual, full length','photo','required','Jeans or chinos with a plain top. Neutral wall, natural light.'),S('w2','Business or formal, full length','photo','required','Suit, blazer or equivalent.'),S('w3','Evening or occasion wear','photo','recommended'),S('w4','Wardrobe walk-through','video','optional','Up to 60 seconds showing 3–4 looks.')],
+        appearance:[S('a1','Headshot, front','photo','required','Shoulders up, no filters, taken in the last 6 months.'),S('a2','Headshot, three-quarter','photo','required'),S('a3','Full body, front','photo','required'),S('a4','Side profile','photo','required'),S('a5','Self-tape monologue','video','required','60–90 seconds. Slate your name and height first.'),S('a6','Commercial slate (smile / neutral)','video','recommended')],
+        appearanceFields:[],
+        expFields:[{k:'r.reel',label:'Showreel link',hint:'Vimeo, YouTube or personal site',b:'full',d:'https://vimeo.com/priyaanand/reel'},{k:'r.accents',label:'Accents',type:'chips',options:['Canadian standard','General American','British RP','Irish','South Asian','French-Canadian'],b:'full',d:['Canadian standard','General American']}],
+        expSlots:[S('e1','Acting résumé','document','recommended')],
+        decl:[]
+      },
+      stunt: {
+        updated:'02 Sep 2026',
+        wardrobe:[S('w1','Athletic wear, full length','photo','required','Fitted training clothes so build is clear.'),S('w2','Personal safety gear','photo','optional','Pads, helmet or harness you own.')],
+        appearance:[S('a1','Headshot, front','photo','required'),S('a3','Full body, front','photo','required'),S('a4','Side profile','photo','required'),S('a5','Stunt reel','video','required','2 minutes max, most recent work first.'),S('a6','Fight or fall demonstration','video','recommended')],
+        appearanceFields:[],
+        expFields:[{k:'r.disciplines',label:'Stunt disciplines',type:'chips',req:1,options:['Fight choreography','High falls','Wire work','Precision driving','Fire burns','Water work','Horse riding','Parkour'],b:'full',d:['Fight choreography','High falls']},{k:'r.coord',label:'Stunt coordinator reference',hint:'Name and production',b:'full',d:'M. Okafor, Northern Line S2'}],
+        expSlots:[S('e1','First aid certificate','document','required'),S('e2','Other certifications (driving, rigging, firearms safety)','document','recommended'),S('e3','Proof of personal insurance','document','optional')],
+        decl:[{k:'r.declWaiver',label:'I understand stunt work carries physical risk and will perform only under a qualified stunt coordinator.'}]
+      },
+      background: {
+        updated:'28 Aug 2026',
+        wardrobe:[S('w1','Everyday casual, full length','photo','required'),S('w2','Business attire, full length','photo','required'),S('w3','Evening wear','photo','recommended'),S('w4','Seasonal outerwear','photo','optional','Winter coat, rain gear.')],
+        appearance:[S('a1','Headshot, front','photo','required'),S('a3','Full body, front','photo','required')],
+        appearanceFields:[],
+        expFields:[{k:'r.avail',label:'Availability',type:'chips',req:1,options:['Weekdays','Weekends','Overnight shoots','Short notice (24h)'],b:'full',d:['Weekdays','Weekends']},{k:'r.car',label:'Own vehicle for set travel',type:'select',options:['Yes','No'],b:'half',d:'Yes'}],
+        expSlots:[],
+        decl:[]
+      },
+      senior: {
+        updated:'28 Aug 2026',
+        wardrobe:[S('w1','Everyday casual, full length','photo','required'),S('w2','Formal wear','photo','recommended')],
+        appearance:[S('a1','Headshot, front','photo','required'),S('a2','Headshot, three-quarter','photo','recommended'),S('a3','Full body, front','photo','required'),S('a5','Introduction video','video','required','30–60 seconds introducing yourself and your experience.')],
+        appearanceFields:[],
+        expFields:[{k:'r.reel',label:'Showreel link',hint:'Optional',b:'full',d:''}],
+        expSlots:[S('e1','Résumé','document','recommended')],
+        decl:[]
+      },
+      double: {
+        updated:'10 Sep 2026',
+        wardrobe:[S('w1','Fitted neutral clothing, full length','photo','required','Form-fitting so body shape is clear.')],
+        appearance:[S('a3','Full body, front','photo','required'),S('a7','Full body, back','photo','required'),S('a4','Full body, left side','photo','required'),S('a8','Hands, close-up','photo','required'),S('a9','Tattoos, scars or birthmarks','photo','optional','Upload if you have any. Casting needs these for matching.'),S('a10','Walk video','video','recommended','Walk toward and away from the camera.')],
+        appearanceFields:[{k:'r.chest',label:'Chest / bust (cm)',b:'third',req:1,d:'86'},{k:'r.waist',label:'Waist (cm)',b:'third',req:1,d:'68'},{k:'r.hips',label:'Hips (cm)',b:'third',req:1,d:'94'},{k:'r.inseam',label:'Inseam (cm)',b:'third',d:'78'},{k:'r.shoe',label:'Shoe size',b:'third',req:1,d:'7.5'},{k:'r.tattoos',label:'Visible tattoos',type:'select',options:['None','Small','Large / multiple'],b:'third',d:'None'}],
+        expFields:[{k:'r.doubled',label:'Performers you have doubled or stood in for',type:'textarea',b:'full',d:'Stand-in for lead, Harbourfront Bank commercial (2024).'}],
+        expSlots:[],
+        decl:[{k:'r.declBody',label:'I consent to body-only images being reviewed by casting professionals for matching purposes.'}]
+      }
+    };
+    const f = {
+      personal:[
+        {k:'p.firstName',label:'First name',req:1,b:'half',d:'Priya'},{k:'p.lastName',label:'Last name',req:1,b:'half',d:'Anand'},
+        {k:'p.stageName',label:'Professional name',hint:'Optional. Shown to casting in place of your legal name.',b:'full',d:''},
+        {k:'p.dob',label:'Date of birth',type:'date',req:1,b:'half',d:'1994-06-18'},
+        {k:'p.gender',label:'Gender',type:'select',req:1,options:['Woman','Man','Non-binary','Self-describe','Prefer not to say'],b:'half',d:'Woman'},
+        {k:'p.address',label:'Street address',req:1,b:'full',d:'418 Dundas St W, Unit 3'},
+        {k:'p.city',label:'City',req:1,b:'third',d:'Toronto'},
+        {k:'p.province',label:'Province / territory',type:'select',req:1,options:PROVS.map(p=>p[1]),b:'third',d:'Ontario',hint:'Used to calculate tax on your fee.'},
+        {k:'p.postal',label:'Postal code',req:1,b:'third',d:'M5T 1G7'},
+        {k:'p.basedIn',label:'Available to work in',type:'chips',options:['Toronto','Vancouver','Montréal','Calgary','Halifax','Anywhere in Canada'],b:'full',d:['Toronto','Anywhere in Canada']}
+      ],
+      contact:[
+        {k:'p.ecName',label:'Emergency contact name',req:1,b:'half',d:'Ravi Anand'},{k:'p.ecRel',label:'Relationship',b:'half',d:'Brother'},
+        {k:'p.ecPhone',label:'Emergency contact phone',type:'tel',req:1,b:'half',d:'+1 647 555 0192'}
+      ],
+      legal:[
+        {k:'p.idType',label:'Identification type',type:'select',req:1,options:['Passport','Driver’s licence','Provincial photo ID','Permanent resident card'],b:'half',d:'Passport'},
+        {k:'p.idNumber',label:'Identification number',req:1,b:'half',d:'HK4418782'},
+        {k:'p.idExpiry',label:'Expiry date',type:'date',req:1,b:'half',d:'2031-04-09'},
+        {k:'p.workAuth',label:'Work authorization',type:'select',req:1,options:['Canadian citizen','Permanent resident','Open work permit','Employer-specific work permit'],b:'half',d:'Canadian citizen'},
+        {k:'p.union',label:'Union status',type:'select',options:['Non-union','ACTRA apprentice','ACTRA full member','UBCP/ACTRA','Other'],b:'half',d:'ACTRA apprentice'}
+      ],
+      appearance:[
+        {k:'r.height',label:'Height (cm)',req:1,b:'third',d:'165'},{k:'r.weight',label:'Weight (kg)',hint:'Optional',b:'third',d:''},
+        {k:'r.build',label:'Build',type:'select',options:['Slim','Athletic','Average','Muscular','Heavy-set'],b:'third',d:'Athletic'},
+        {k:'r.eyes',label:'Eye colour',type:'select',req:1,options:['Brown','Hazel','Blue','Green','Grey'],b:'third',d:'Brown'},
+        {k:'r.hair',label:'Hair colour',type:'select',req:1,options:['Black','Dark brown','Light brown','Blonde','Red','Grey','Other'],b:'third',d:'Black'},
+        {k:'r.hairLength',label:'Hair length',type:'select',options:['Shaved','Short','Medium','Long'],b:'third',d:'Long'}
+      ],
+      experience:[
+        {k:'r.years',label:'Years of experience',type:'select',req:1,options:['None yet','Under 1','1–3','3–5','5–10','10+'],b:'half',d:'3–5'},
+        {k:'r.languages',label:'Languages',req:1,hint:'Fluent or conversational',b:'half',d:'English, Hindi, conversational French'},
+        {k:'r.skills',label:'Special skills',type:'chips',options:['Dance','Singing','Martial arts','Swimming','Horse riding','Driving (manual)','Musical instrument','Sign language'],b:'full',d:['Dance','Swimming']},
+        {k:'r.training',label:'Training',type:'textarea',hint:'Schools, workshops, coaches',b:'full',d:'George Brown Theatre School (2016). On-camera intensive, Toronto (2022).'}
+      ]
+    };
+    const idSlots = [S('idFront','Identification, front','document','required'),S('idBack','Identification, back','document','required','Not needed for passports.')];
+    const decl = [
+      {k:'p.declAdult',label:'I am 18 or older, or a parent or guardian is completing this registration for me.'},
+      {k:'p.declAccurate',label:'The identification I have provided is my own and is valid.'},
+      {k:'p.declShare',label:'I consent to Canada Casting Studio sharing my profile with verified casting professionals during my registration period.'}
+    ];
+    const steps = [
+      {key:'personal',title:'Personal information',short:'Personal',common:true,intro:'The basics about you. This belongs to your main profile and is shared by every role you register for.'},
+      {key:'contact',title:'Contact & verification',short:'Contact',common:true,intro:'We verify your email and mobile once. Casting professionals contact you through the platform.'},
+      {key:'legal',title:'Legal information',short:'Legal',common:true,intro:'Identification and eligibility. Kept private and used only to verify your profile.'},
+      {key:'wardrobe',title:'Wardrobe',short:'Wardrobe',common:false,intro:'Show casting what you would bring to set. Requirements depend on the role.'},
+      {key:'appearance',title:'Appearance',short:'Appearance',common:false,intro:'Photos, video and measurements casting uses to match you to a part.'},
+      {key:'experience',title:'Experience',short:'Experience',common:false,intro:'Your credits, training and skills for this role.'},
+      {key:'review',title:'Summary & review',short:'Review',common:false,intro:'Check everything before payment. You can edit any section.'}
+    ];
+    const casting = [
+      {id:'c1',role:'principal',title:'Dana, café owner (lead)',production:'Maple & Main',type:'Feature film',company:'Linden Casting',location:'Toronto, ON',dates:'3–21 Nov 2026',deadline:'2 Oct 2026',age:'28–38',gender:'Woman',union:'ACTRA or apprentice',experience:'Two or more on-camera credits',appearance:'Any ethnicity. Natural look, shoulder-length hair or longer.',skills:['Comfortable with light comedy','Basic barista skills a plus'],media:['Self-tape of provided sides','Current headshot'],summary:'Warm, quick-witted owner of a neighbourhood café who is fighting a redevelopment plan.'},
+      {id:'c2',role:'principal',title:'ER resident (recurring)',production:'Night Shift, Season 3',type:'Series',company:'North Shore Productions',location:'Toronto, ON',dates:'Jan–Apr 2027',deadline:'14 Oct 2026',age:'25–35',gender:'Any',union:'ACTRA',experience:'Series guest or recurring credit',appearance:'Open',skills:['Medical terminology delivery'],media:['Self-tape','Showreel link'],summary:'Second-year resident who becomes a regular in the trauma bay storyline.'},
+      {id:'c3',role:'stunt',title:'Stunt performer, rooftop chase',production:'Crossfire',type:'Series',company:'Iron Gate Stunts',location:'Vancouver, BC',dates:'12–16 Dec 2026',deadline:'20 Oct 2026',age:'22–40',gender:'Man',union:'UBCP/ACTRA',experience:'Three years stunt work',appearance:'Athletic build, 175–185 cm',skills:['Parkour','High falls'],media:['Stunt reel'],summary:'Rooftop chase sequence doubling a lead character. Rigging on set.'},
+      {id:'c4',role:'background',title:'Market shoppers',production:'Winter Market',type:'Commercial',company:'Brightline Casting',location:'Toronto, ON',dates:'8 Nov 2026 (1 day)',deadline:'25 Oct 2026',age:'18–70',gender:'Any',union:'Non-union',experience:'None required',appearance:'Winter clothing, no logos',skills:[],media:['Full-length photo in outerwear'],summary:'Holiday market scene for a national retail spot.'},
+      {id:'c5',role:'double',title:'Photo double for lead actress',production:'The Long Coast',type:'Feature film',company:'Linden Casting',location:'Halifax, NS',dates:'Feb 2027',deadline:'30 Oct 2026',age:'28–36',gender:'Woman',union:'Any',experience:'None required',appearance:'162–168 cm, slim to athletic build, long dark hair',skills:['Swimming'],media:['Full body front, back and side','Hands close-up'],summary:'Beach and water scenes. Match to the principal’s height and build.'},
+      {id:'c6',role:'senior',title:'Grandfather, family drama',production:'Grand Pines',type:'Series',company:'North Shore Productions',location:'Calgary, AB',dates:'Mar 2027',deadline:'1 Nov 2026',age:'65–80',gender:'Man',union:'Any',experience:'Some on-camera work preferred',appearance:'Open',skills:[],media:['Introduction video'],summary:'Recurring grandfather in a multigenerational ranch drama.'}
+    ];
+    const threads = [
+      {id:'t1',from:'Linden Casting',about:'Maple & Main · Dana',unread:true,msgs:[
+        {me:false,t:'22 Sep, 10:14',body:'Hi Priya, we came across your Principal Actor profile for the role of Dana in Maple & Main. Could you send a self-tape of the attached sides by 2 October?'},
+        {me:false,t:'22 Sep, 10:15',body:'Sides_Dana_Sc12.pdf',file:true},
+        {me:true,t:'22 Sep, 13:40',body:'Thank you, I would be glad to. I will upload it by Tuesday.'},
+        {me:false,t:'24 Sep, 09:02',body:'Great. Please also confirm your availability for 3–21 November.'}]},
+      {id:'t2',from:'North Shore Productions',about:'Request for additional information',unread:false,msgs:[
+        {me:false,t:'18 Sep, 16:20',body:'Could you add a current full-length photo in business attire to your profile? We are reviewing profiles for a recurring role.'},
+        {me:true,t:'19 Sep, 08:11',body:'Done. I have updated my wardrobe photos.'}]},
+      {id:'t3',from:'Canada Casting Studio',about:'Your profile is active',unread:false,msgs:[
+        {me:false,t:'14 Mar, 11:00',body:'Your Principal Actor profile has been verified and is now visible to casting professionals until 13 March 2027.'}]}
+    ];
+    const tax = { NB:[['HST',15]], NL:[['HST',15]], NS:[['HST',14]], ON:[['HST',13]], PE:[['HST',15]], QC:[['GST',5],['QST',9.975]] };
+    return { PROVS, roles, req, f, idSlots, decl, steps, casting, threads, tax, fee:100 };
+  })();
+
+  constructor(props) {
+    super(props);
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem('ccs-d2-v1') || 'null'); } catch (e) {}
+    this.state = s && s.v === 1 ? this.strip(s) : this.preset('guest');
+    this.state.toast = '';
+    this.frameRef = React.createRef();
+  }
+  strip(s) {
+    const clean = m => { Object.values(m || {}).forEach(x => { if (x) x.url = null; }); };
+    clean(s.profile.media); Object.values(s.roles).forEach(r => clean(r.media));
+    if (s.pay) s.pay.status = s.pay.status === 'processing' ? 'idle' : s.pay.status;
+    return s;
+  }
+  componentDidMount() {
+    const el = this.frameRef.current;
+    if (el && window.ResizeObserver) { this.ro = new ResizeObserver(() => this.setState({ w: el.clientWidth })); this.ro.observe(el); }
+    if (this.state.screen === 'activated') this.startCountdown();
+  }
+  componentWillUnmount() { this.ro && this.ro.disconnect(); clearInterval(this.cd); clearTimeout(this.tt); }
+  componentDidUpdate() { try { const { toast, w, ...rest } = this.state; localStorage.setItem('ccs-d2-v1', JSON.stringify(rest)); } catch (e) {} }
+
+  C() { return Component.CFG; }
+  R() { return { status:'none', step:0, maxStep:0, data:{ credits:[] }, media:{}, confirm:false, termsAt:null, regDate:null, expiry:null, appId:null, editing:false }; }
+  fake(slot) { const ext = slot.kind === 'video' ? '.mp4' : slot.kind === 'document' ? '.pdf' : '.jpg'; return { name: slot.label.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'') + ext, size: slot.kind === 'video' ? '48.2 MB' : slot.kind === 'document' ? '640 KB' : '3.1 MB', url:null, img:false }; }
+  demoProfile() {
+    const C = this.C(), p = { email:'priya.anand@gmail.com', phone:'+1 416 555 0138', emailVerified:true, phoneVerified:true, media:{} };
+    [...C.f.personal, ...C.f.contact, ...C.f.legal].forEach(x => p[x.k.slice(2)] = x.d);
+    C.decl.forEach(x => p[x.k.slice(2)] = true);
+    C.idSlots.forEach(sl => p.media[sl.id] = this.fake(sl));
+    return p;
+  }
+  demoRole(key, extra) {
+    const C = this.C(), q = C.req[key], r = this.R();
+    [...C.f.appearance, ...q.appearanceFields, ...C.f.experience, ...q.expFields].forEach(x => r.data[x.k.slice(2)] = x.d);
+    q.decl.forEach(x => r.data[x.k.slice(2)] = true);
+    r.data.credits = [{ production:'Northern Line, Season 2', role:'Det. Lena Park (guest)', year:'2025' },{ production:'Harbourfront Bank', role:'Lead, commercial', year:'2024' }];
+    [...q.wardrobe, ...q.appearance, ...q.expSlots].filter(s => s.level !== 'optional').forEach(s => r.media[s.id] = this.fake(s));
+    r.termsAt = '2026-03-02'; r.step = 6; r.maxStep = 6;
+    return Object.assign(r, extra || {});
+  }
+  preset(kind) {
+    const C = this.C(), roles = {};
+    C.roles.forEach(r => roles[r.key] = this.R());
+    const base = { v:1, screen:'landing', lv:null, ov:null, device:'desktop', barOpen:true, user:null, profile:{ media:{} }, roles, current:'principal', otp:{ sent:false, code:'', err:'' }, terms:{ a:false, b:false, c:false }, pay:{ status:'idle', failNext:false }, castOpen:'c1', castFilter:'mine', interested:{}, threads:JSON.parse(JSON.stringify(C.threads)), threadOpen:'t1', draft:'', count:5, loginAs:'active', authErr:'', savedMode:'resume' };
+    const user = { name:'Priya Anand', email:'priya.anand@gmail.com' };
+    if (kind === 'guest') return base;
+    if (kind === 'new') return { ...base, user, screen:'registerAs', profile:{ firstName:'Priya', lastName:'Anand', email:user.email, phone:'+1 416 555 0138', emailVerified:true, media:{} } };
+    const profile = this.demoProfile();
+    if (kind === 'progress') {
+      const r = this.demoRole('principal', { status:'onboarding', step:3, maxStep:3 });
+      r.media = {};
+      return { ...base, user, profile, roles:{ ...roles, principal:r }, screen:'resume', savedMode:'resume' };
+    }
+    if (kind === 'payment') return { ...base, user, profile, roles:{ ...roles, principal:this.demoRole('principal', { status:'ready', confirm:true }) }, screen:'payment' };
+    if (kind === 'verifying') return { ...base, user, profile, roles:{ ...roles, principal:this.demoRole('principal', { status:'verifying', confirm:true, appId:'CCS-PA-2609-04817', paidAt:'2026-09-25' }) }, screen:'verifying' };
+    return { ...base, user, profile, screen:'home', roles:{ ...roles,
+      principal:this.demoRole('principal', { status:'active', confirm:true, appId:'CCS-PA-2603-01122', regDate:'2026-03-14', expiry:'2027-03-13' }),
+      background:this.demoRole('background', { status:'expired', confirm:true, appId:'CCS-BG-2408-00391', regDate:'2024-08-02', expiry:'2025-08-01' }) } };
+  }
+
+  scrollTop() { try { window.scrollTo(0, 0); } catch (e) {} const el = this.frameRef.current; if (el) el.scrollTop = 0; }
+  go(screen, extra) {
+    this.setState({ screen, ...(extra || {}) }, () => this.scrollTop());
+    if (screen === 'activated') this.startCountdown();
+  }
+  toast(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast:'' }), 2400); }
+  startCountdown() {
+    clearInterval(this.cd);
+    this.setState({ count:5 });
+    this.cd = setInterval(() => {
+      if (this.state.screen !== 'activated') { clearInterval(this.cd); return; }
+      const n = this.state.count - 1;
+      if (n <= 0) { clearInterval(this.cd); this.go('home', { count:0 }); } else this.setState({ count:n });
+    }, 1000);
+  }
+  routeAfterLogin(s) {
+    const e = Object.entries(s.roles), has = st => e.find(([, r]) => r.status === st);
+    let hit;
+    if (has('active')) return { screen:'home' };
+    if ((hit = has('verifying'))) return { screen:'verifying', current:hit[0] };
+    if ((hit = has('ready'))) return { screen:'payment', current:hit[0] };
+    if ((hit = has('onboarding'))) return { screen:'resume', current:hit[0], savedMode:'resume' };
+    return { screen:'registerAs' };
+  }
+
+  role(s) { s = s || this.state; return s.roles[s.current]; }
+  getVal(k, s) { s = s || this.state; const src = k[0] === 'p' ? s.profile : this.role(s).data; return src[k.slice(2)]; }
+  setVal(k, v) {
+    this.setState(s => {
+      if (k[0] === 'p') return { profile:{ ...s.profile, [k.slice(2)]:v } };
+      const r = s.roles[s.current];
+      return { roles:{ ...s.roles, [s.current]:{ ...r, data:{ ...r.data, [k.slice(2)]:v } } } };
+    });
+  }
+  setMedia(scope, id, file) {
+    this.setState(s => {
+      if (scope === 'p') return { profile:{ ...s.profile, media:{ ...(s.profile.media || {}), [id]:file } } };
+      const r = s.roles[s.current];
+      return { roles:{ ...s.roles, [s.current]:{ ...r, media:{ ...r.media, [id]:file } } } };
+    });
+  }
+  patchRole(key, patch) { this.setState(s => ({ roles:{ ...s.roles, [key]:{ ...s.roles[key], ...patch } } })); }
+
+  fieldsFor(step, key) { const C = this.C(), q = C.req[key]; return { personal:C.f.personal, contact:C.f.contact, legal:C.f.legal, wardrobe:[], appearance:[...C.f.appearance, ...q.appearanceFields], experience:[...C.f.experience, ...q.expFields], review:[] }[step]; }
+  slotsFor(step, key) { const C = this.C(), q = C.req[key]; return ({ legal:C.idSlots.map(s => ({ ...s, scope:'p' })), wardrobe:q.wardrobe, appearance:q.appearance, experience:q.expSlots })[step] || []; }
+  declsFor(step, key) { const C = this.C(); return step === 'legal' ? [...C.decl, ...C.req[key].decl] : []; }
+  missing(step, s) {
+    s = s || this.state; const key = s.current, out = [];
+    const empty = v => v == null || v === '' || (Array.isArray(v) && !v.length);
+    this.fieldsFor(step, key).forEach(f => { if (f.req && empty(this.getVal(f.k, s))) out.push(f.label); });
+    this.slotsFor(step, key).forEach(sl => { if (sl.level === 'required') { const m = sl.scope === 'p' ? (s.profile.media || {}) : this.role(s).media; if (!m[sl.id]) out.push(sl.label); } });
+    this.declsFor(step, key).forEach(d => { if (!this.getVal(d.k, s)) out.push('Declaration'); });
+    if (step === 'contact') { if (!s.profile.emailVerified) out.push('Email verification'); if (!s.profile.phoneVerified) out.push('Mobile verification'); }
+    if (step === 'review') { const inc = this.C().steps.slice(0, 6).some(x => this.missing(x.key, s).length); if (inc) out.push('Complete all sections'); if (!this.role(s).confirm) out.push('Confirmation'); }
+    return out;
+  }
+  hasOtherRole(s) { return Object.entries(s.roles).some(([k, r]) => k !== s.current && ['verifying','active','expired','paid','ready'].includes(r.status)); }
+  taxes(s) {
+    const C = this.C(), pv = C.PROVS.find(p => p[1] === s.profile.province), code = pv ? pv[0] : 'ON';
+    const lines = (C.tax[code] || [['GST',5]]).map(([n, r]) => ({ label:n + ' ' + r + '%', amt:C.fee * r / 100 }));
+    const total = C.fee + lines.reduce((a, l) => a + l.amt, 0);
+    const $ = n => 'CAD $' + n.toFixed(2);
+    return { province: pv ? pv[1] : 'Ontario', lines: lines.map(l => ({ label:l.label, amt:$(l.amt) })), fee:$(C.fee), total:$(total) };
+  }
+  fmtDate(iso) { if (!iso) return '—'; const d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('en-CA', { day:'numeric', month:'short', year:'numeric' }); }
+
+  renderVals() {
+    const s = this.state, C = this.C();
+    const lv = s.lv || this.props.landingVariant || 'A', ov = s.ov || 'B';
+    const mobile = s.device === 'mobile', w = s.w || 1200, narrow = mobile || w < 760;
+    const pub = ['landing','signup','login','created','registerAs','terms','resume','saved'];
+    const onb = ['onboard'], chk = ['payment','submitted','verifying','activated'];
+    const role = this.role(), rc = C.roles.find(r => r.key === s.current), q = C.req[s.current];
+    const steps = C.steps.map((st, i) => {
+      const miss = this.missing(st.key);
+      const reused = st.common && this.hasOtherRole(s);
+      const state = i === role.step ? 'current' : (i <= role.maxStep && !miss.length) ? 'done' : i <= role.maxStep ? 'partial' : 'todo';
+      return { ...st, i, n: String(i + 1).padStart(2, '0'), missing:miss, missCount:miss.length, reused, state };
+    });
+    const nav = e => { const to = e.currentTarget.dataset.to; if (to) this.go(to); };
+    const opt = (cur, v) => ({ v, bg: cur === v ? '#C8942A' : '#23262E', fg: cur === v ? '#111318' : '#E6E8EC' });
+    const jumps = [['landing','Landing'],['signup','Sign up'],['login','Log in'],['created','Account created'],['registerAs','Register as'],['terms','Terms & conditions'],['resume','Continue registration'],['onboard','Onboarding'],['payment','Payment'],['submitted','Registration submitted'],['verifying','Verification'],['activated','Profile activated'],['home','Home'],['registrations','My registrations'],['casting','Casting calls'],['castingDetail','Casting call detail'],['messages','Messages']];
+    const presetFor = { created:'new', registerAs:'new', terms:'new', resume:'progress', onboard:'progress', payment:'payment', submitted:'verifying', verifying:'verifying', activated:'active', home:'active', registrations:'active', casting:'active', castingDetail:'active', messages:'active' };
+
+    const app = {
+      screen:s.screen, lv, ov, narrow, mobile, cfg:C, user:s.user, profile:s.profile, roles:s.roles, current:s.current, role, roleCfg:rc, req:q,
+      steps, step:steps[role.step], otp:s.otp, terms:s.terms, pay:s.pay, taxes:this.taxes(s), castOpen:s.castOpen, castFilter:s.castFilter, interested:s.interested,
+      threads:s.threads, threadOpen:s.threadOpen, draft:s.draft, count:s.count, loginAs:s.loginAs, authErr:s.authErr, savedMode:s.savedMode,
+      fmtDate:d => this.fmtDate(d), fieldsFor:(st) => this.fieldsFor(st, s.current), slotsFor:(st) => this.slotsFor(st, s.current), declsFor:(st) => this.declsFor(st, s.current), getVal:k => this.getVal(k),
+      nav, go:(x, e) => this.go(x, e), toast:m => this.toast(m),
+      onField: e => { const t = e.currentTarget; this.setVal(t.dataset.k, t.type === 'checkbox' ? t.checked : t.value); },
+      onChip: e => { const { k, v } = e.currentTarget.dataset; const cur = this.getVal(k) || []; this.setVal(k, cur.includes(v) ? cur.filter(x => x !== v) : [...cur, v]); },
+      onUpload: e => { const t = e.currentTarget, f = t.files && t.files[0]; if (!f) return; const img = /^image\//.test(f.type); this.setMedia(t.dataset.scope, t.dataset.slot, { name:f.name, size:(f.size / 1048576).toFixed(1) + ' MB', url:img ? URL.createObjectURL(f) : null, img }); t.value = ''; this.toast('Uploaded ' + f.name); },
+      onSample: e => { const { scope, slot } = e.currentTarget.dataset; const sl = this.slotsFor(this.C().steps[role.step].key === 'review' ? 'appearance' : this.C().steps[role.step].key, s.current).find(x => x.id === slot) || { label:slot, kind:'photo' }; this.setMedia(scope, slot, this.fake(sl)); },
+      onRemove: e => { const { scope, slot } = e.currentTarget.dataset; this.setMedia(scope, slot, null); },
+      onCredit: e => { const { i, f } = e.currentTarget.dataset; const cr = [...(role.data.credits || [])]; cr[+i] = { ...cr[+i], [f]:e.currentTarget.value }; this.setVal('r.credits', cr); },
+      addCredit: () => this.setVal('r.credits', [...(role.data.credits || []), { production:'', role:'', year:'' }]),
+      removeCredit: e => { const i = +e.currentTarget.dataset.i; this.setVal('r.credits', (role.data.credits || []).filter((_, j) => j !== i)); },
+      sendOtp: () => { if (!s.profile.phone) { this.setState({ otp:{ ...s.otp, err:'Enter your mobile number first.' } }); return; } this.setState({ otp:{ sent:true, code:'', err:'' } }); this.toast('Code sent to ' + s.profile.phone); },
+      onOtp: e => this.setState({ otp:{ ...s.otp, code:e.currentTarget.value.replace(/\D/g, '').slice(0, 6), err:'' } }),
+      verifyOtp: () => { if (s.otp.code.length !== 6) { this.setState({ otp:{ ...s.otp, err:'Enter the 6-digit code.' } }); return; } this.setState({ profile:{ ...s.profile, phoneVerified:true }, otp:{ sent:false, code:'', err:'' } }); this.toast('Mobile number verified'); },
+      changePhone: () => this.setState({ profile:{ ...s.profile, phoneVerified:false } }),
+      verifyEmail: () => { this.setState({ profile:{ ...s.profile, emailVerified:true } }); this.toast('Email verified'); },
+      signUp: () => { const p = s.profile; if (!p.firstName || !p.email) { this.setState({ authErr:'Enter your name and email to continue.' }); return; } this.setState({ user:{ name:p.firstName + ' ' + (p.lastName || ''), email:p.email }, authErr:'' }); this.go('created'); },
+      setLoginAs: e => this.setState({ loginAs:e.currentTarget.dataset.v }),
+      login: () => { const n = this.preset(s.loginAs); const r = this.routeAfterLogin(n); this.setState({ ...n, lv:s.lv, ov:s.ov, device:s.device, barOpen:s.barOpen, ...r }, () => this.scrollTop()); this.toast('Signed in as Priya Anand'); },
+      logout: () => { this.setState({ ...this.preset('guest'), lv:s.lv, ov:s.ov, device:s.device }); this.scrollTop(); },
+      pickRole: e => {
+        const k = e.currentTarget.dataset.role, r = s.roles[k];
+        if (!s.user) { this.setState({ current:k }); this.go('signup'); return; }
+        if (r.status === 'expired') { this.setState({ current:k, roles:{ ...s.roles, [k]:{ ...r, status:'ready', step:6, maxStep:6, confirm:false, renewing:true } } }); this.go('onboard'); return; }
+        if (r.status === 'onboarding') { this.setState({ current:k }); this.go('onboard'); return; }
+        if (r.status !== 'none') { this.setState({ current:k }); this.go('registrations'); return; }
+        this.setState({ current:k, terms:{ a:false, b:false, c:false } }); this.go('terms');
+      },
+      toggleTerm: e => { const k = e.currentTarget.dataset.k; this.setState({ terms:{ ...s.terms, [k]:!s.terms[k] } }); },
+      acceptTerms: () => { if (!(s.terms.a && s.terms.b && s.terms.c)) return; this.patchRole(s.current, { status:'onboarding', termsAt:'2026-09-25', step:0, maxStep:0 }); this.go('onboard'); },
+      declineTerms: () => { this.go('registerAs'); this.toast('You need to accept the terms to register for this role.'); },
+      next: () => {
+        const r = role;
+        if (r.step < 6) { const n = r.step + 1; this.patchRole(s.current, { step:n, maxStep:Math.max(r.maxStep, n) }); this.scrollTop(); this.toast('Saved. ' + C.steps[r.step].title + ' complete.'); return; }
+        if (this.missing('review').length) { this.toast('Complete the highlighted items before continuing.'); return; }
+        if (r.editing) { this.patchRole(s.current, { editing:false }); this.go('registrations'); this.toast(rc.name + ' profile updated'); return; }
+        this.patchRole(s.current, { status:'ready' }); this.go('payment', { pay:{ status:'idle', failNext:s.pay.failNext } });
+      },
+      back: () => { if (role.step === 0) { this.go(role.editing ? 'registrations' : 'registerAs'); return; } this.patchRole(s.current, { step:role.step - 1 }); this.scrollTop(); },
+      toStep: e => { const n = +e.currentTarget.dataset.step; if (n <= role.maxStep || role.editing) { this.patchRole(s.current, { step:n, maxStep:Math.max(role.maxStep, n) }); if (ov !== 'C') this.scrollTop(); } },
+      saveExit: () => { this.go(role.editing ? 'registrations' : 'saved', { savedMode:'saved' }); this.toast('Progress saved'); },
+      toggleConfirm: () => this.patchRole(s.current, { confirm:!role.confirm }),
+      payNow: () => {
+        this.setState({ pay:{ ...s.pay, status:'processing' } });
+        setTimeout(() => {
+          if (this.state.pay.failNext) { this.setState({ pay:{ ...this.state.pay, status:'failed' } }); return; }
+          const id = 'CCS-' + rc.code + '-2609-' + String(Math.floor(10000 + Math.random() * 89999));
+          this.patchRole(s.current, { status:'verifying', appId:id, paidAt:'2026-09-25', renewing:false });
+          this.setState({ pay:{ status:'success', failNext:false } }); this.go('submitted');
+        }, 1600);
+      },
+      retryPay: () => this.setState({ pay:{ ...s.pay, status:'idle' } }),
+      toggleFail: () => this.setState({ pay:{ ...s.pay, failNext:!s.pay.failNext } }),
+      approve: () => { this.patchRole(s.current, { status:'active', regDate:'2026-09-25', expiry:'2027-09-24' }); this.go('activated'); },
+      skipCountdown: () => { clearInterval(this.cd); this.go('home'); },
+      openCast: e => this.go('castingDetail', { castOpen:e.currentTarget.dataset.id }),
+      setCastFilter: e => this.setState({ castFilter:e.currentTarget.dataset.v }),
+      interest: e => { const id = e.currentTarget.dataset.id; this.setState({ interested:{ ...s.interested, [id]:!s.interested[id] } }); if (!s.interested[id]) this.toast('Interest sent. Casting will contact you through Messages if they want to proceed.'); },
+      openThread: e => { const id = e.currentTarget.dataset.id; this.setState({ threadOpen:id, threads:s.threads.map(t => t.id === id ? { ...t, unread:false } : t) }); },
+      closeThread: () => this.setState({ threadOpen:null }),
+      onDraft: e => this.setState({ draft:e.currentTarget.value }),
+      send: () => { if (!s.draft.trim()) return; this.setState({ draft:'', threads:s.threads.map(t => t.id === s.threadOpen ? { ...t, msgs:[...t.msgs, { me:true, t:'Just now', body:s.draft.trim() }] } : t) }); },
+      updateRole: e => { const k = e.currentTarget.dataset.role; this.setState({ current:k, roles:{ ...s.roles, [k]:{ ...s.roles[k], editing:true, step:3, maxStep:6 } } }); this.go('onboard'); },
+      continueRole: e => { const k = e.currentTarget.dataset.role; this.setState({ current:k }); const st = s.roles[k].status; this.go(st === 'onboarding' ? 'onboard' : st === 'ready' ? 'payment' : st === 'verifying' ? 'verifying' : 'registrations'); },
+      renew: e => { const k = e.currentTarget.dataset.role; this.setState({ current:k, roles:{ ...s.roles, [k]:{ ...s.roles[k], status:'ready', step:6, maxStep:6, confirm:false, renewing:true } } }); this.go('onboard'); }
+    };
+
+    return {
+      app, screen:s.screen, toast:s.toast, frameRef:this.frameRef,
+      isPublic:pub.includes(s.screen), isOnboard:onb.includes(s.screen), isCheckout:chk.includes(s.screen), isApp:!pub.includes(s.screen) && !onb.includes(s.screen) && !chk.includes(s.screen),
+      outerPad: mobile ? '24px 12px 110px' : '0', frameMax: mobile ? '390px' : 'none', frameH: mobile ? '844px' : 'auto', frameOverflow: mobile ? 'auto' : 'visible',
+      frameRadius: mobile ? '28px' : '0', frameBorder: mobile ? '8px solid #111318' : 'none',
+      barOpen:s.barOpen, barClosed:!s.barOpen, toggleBar:() => this.setState({ barOpen:!s.barOpen }),
+      jumpList:jumps.map(([v, l]) => ({ v, l })),
+      jump: e => { const v = e.currentTarget.value, p = presetFor[v]; const base = p ? this.preset(p) : {}; this.setState({ ...base, lv:s.lv, ov:s.ov, device:s.device, barOpen:true, screen:v, pay:{ status:'idle', failNext:false } }, () => this.scrollTop()); if (v === 'activated') this.startCountdown(); },
+      lvCur:lv, ovCur:ov,
+      pickLV: e => this.setState({ lv:e.currentTarget.value, screen:'landing' }, () => this.scrollTop()),
+      pickOV: e => { const v = e.currentTarget.value; if (s.screen !== 'onboard') { const n = this.preset('progress'); this.setState({ ...n, lv:s.lv, ov:v, device:s.device, screen:'onboard' }, () => this.scrollTop()); } else this.setState({ ov:v }); },
+      devOpts:[['desktop','Desktop'],['mobile','Mobile']].map(([v, l]) => ({ v, l, ...opt(s.device, v) })),
+      setLV: e => this.setState({ lv:e.currentTarget.dataset.v, screen:'landing' }, () => this.scrollTop()),
+      setOV: e => { const v = e.currentTarget.dataset.v; if (s.screen !== 'onboard') { const n = this.preset('progress'); this.setState({ ...n, lv:s.lv, ov:v, device:s.device, screen:'onboard' }, () => this.scrollTop()); } else this.setState({ ov:v }); },
+      setDevice: e => this.setState({ device:e.currentTarget.dataset.v }),
+      autofill: () => { const p = this.demoProfile(), cur = s.roles[s.current], d = this.demoRole(s.current); this.setState({ user:s.user || { name:'Priya Anand', email:p.email }, profile:p, roles:{ ...s.roles, [s.current]:{ ...cur, data:d.data, media:{ ...d.media, ...cur.media } } } }); this.toast('Demo data filled in'); },
+      reset: () => { this.setState({ ...this.preset('guest'), lv:s.lv, ov:s.ov, device:s.device }); this.scrollTop(); }
+    };
+  }
+}
+</script>
+</body>
+</html>
