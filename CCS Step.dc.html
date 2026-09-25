@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:28px;font-family:'Jost',sans-serif;color:#1E1A14;">
+  <sc-if value="{{ reused }}">
+    <div style="display:flex;gap:14px;align-items:flex-start;background:#F4EEE1;border:1px solid #E6DDCB;border-radius:10px;padding:14px 16px;">
+      <img src="assets/ccs-mark.png" alt="" style="height:26px;width:auto;flex:none;"></img>
+      <div style="font-size:14px;line-height:1.55;"><strong style="font-weight:500;">Filled in from your main profile.</strong> <span style="color:#6B6152;">Review it and continue. Changes here update every role you are registered for.</span></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isContact }}">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div style="border:1px solid #E6DDCB;border-radius:10px;background:#fff;padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+        <label style="flex:1 1 240px;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">Email address<input type="email" value="{{ app.profile.email }}" onChange="{{ app.onField }}" data-k="p.email" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;background:#fff;"></input></label>
+        <sc-if value="{{ emailOk }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#2E6443;background:#E4F0E7;border-radius:999px;padding:8px 12px;">✓ Verified</span></sc-if>
+        <sc-if value="{{ emailNo }}"><button onClick="{{ app.verifyEmail }}" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:12px 16px;font-size:14px;cursor:pointer;">Send verification link</button></sc-if>
+      </div>
+      <div style="border:1px solid #E6DDCB;border-radius:10px;background:#fff;padding:16px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+          <label style="flex:1 1 240px;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">Mobile number<input type="tel" value="{{ app.profile.phone }}" onChange="{{ app.onField }}" data-k="p.phone" placeholder="+1 416 555 0138" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;background:#fff;"></input></label>
+          <sc-if value="{{ phoneOk }}">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#2E6443;background:#E4F0E7;border-radius:999px;padding:8px 12px;">✓ Verified</span>
+            <button onClick="{{ app.changePhone }}" style="background:none;border:none;color:#8C6418;text-decoration:underline;cursor:pointer;font-size:13px;padding:8px 0;">Change number</button>
+          </sc-if>
+          <sc-if value="{{ showSend }}"><button onClick="{{ app.sendOtp }}" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:12px 16px;font-size:14px;cursor:pointer;">Send code</button></sc-if>
+        </div>
+        <sc-if value="{{ otpSent }}">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;border-top:1px solid #EFE7D6;padding-top:12px;">
+            <label style="flex:0 1 220px;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">6-digit code<input inputMode="numeric" value="{{ app.otp.code }}" onChange="{{ app.onOtp }}" placeholder="••••••" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:20px;font-family:'JetBrains Mono',monospace;letter-spacing:.4em;background:#fff;"></input></label>
+            <button onClick="{{ app.verifyOtp }}" style="background:#C8942A;color:#1E1A14;border:none;border-radius:6px;padding:13px 18px;font-size:14px;font-weight:500;cursor:pointer;">Verify</button>
+            <button onClick="{{ app.sendOtp }}" style="background:none;border:none;color:#8C6418;text-decoration:underline;cursor:pointer;font-size:13px;padding:12px 0;">Resend code</button>
+            <span style="flex:1 1 100%;font-size:12px;color:#6B6152;">Prototype: any 6 digits will verify.</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ app.otp.err }}"><div style="font-size:13px;color:#A4462B;">{{ app.otp.err }}</div></sc-if>
+      </div>
+      <div style="font-size:13px;font-weight:500;letter-spacing:.06em;color:#6B6152;margin-top:6px;">EMERGENCY CONTACT</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasFields }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-wrap:wrap;gap:18px 16px;">
+      <sc-for list="{{ fields }}" as="f" hint-placeholder-count="6">
+        <div style="flex:1 1 {{ f.basis }};min-width:0;max-width:100%;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:13px;font-weight:500;color:#4A4234;display:flex;gap:6px;align-items:baseline;">{{ f.label }}<sc-if value="{{ f.req }}"><span style="color:#B07A12;">*</span></sc-if></div>
+          <sc-if value="{{ f.isInput }}"><input type="{{ f.inputType }}" value="{{ f.value }}" onChange="{{ app.onField }}" data-k="{{ f.k }}" style="width:100%;padding:12px 14px;border:1px solid {{ f.bd }};border-radius:6px;font-size:15px;background:#fff;"></input></sc-if>
+          <sc-if value="{{ f.isSelect }}">
+            <select value="{{ f.value }}" onChange="{{ app.onField }}" data-k="{{ f.k }}" style="width:100%;padding:12px 12px;border:1px solid {{ f.bd }};border-radius:6px;font-size:15px;background:#fff;">
+              <option value="">Select…</option>
+              <sc-for list="{{ f.options }}" as="o"><option value="{{ o.v }}">{{ o.v }}</option></sc-for>
+            </select>
+          </sc-if>
+          <sc-if value="{{ f.isTextarea }}"><textarea value="{{ f.value }}" onChange="{{ app.onField }}" data-k="{{ f.k }}" rows="3" style="width:100%;padding:12px 14px;border:1px solid {{ f.bd }};border-radius:6px;font-size:15px;background:#fff;resize:vertical;line-height:1.5;"></textarea></sc-if>
+          <sc-if value="{{ f.isChips }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{ f.options }}" as="o">
+                <button onClick="{{ app.onChip }}" data-k="{{ f.k }}" data-v="{{ o.v }}" style="padding:8px 13px;border-radius:999px;font-size:14px;cursor:pointer;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};">{{ o.v }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ f.hint }}"><div style="font-size:12px;color:#6B6152;line-height:1.4;">{{ f.hint }}</div></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isExperience }}">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;">
+        <div style="font-size:13px;font-weight:500;letter-spacing:.06em;color:#6B6152;">PREVIOUS PRODUCTIONS</div>
+        <button onClick="{{ app.addCredit }}" style="background:none;border:1px solid #CFC4AD;border-radius:6px;padding:7px 12px;font-size:13px;cursor:pointer;">+ Add credit</button>
+      </div>
+      <sc-for list="{{ credits }}" as="c" hint-placeholder-count="2">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;background:#fff;border:1px solid #E6DDCB;border-radius:10px;padding:12px;">
+          <input value="{{ c.production }}" onChange="{{ app.onCredit }}" data-i="{{ c.i }}" data-f="production" placeholder="Production" style="flex:2 1 200px;min-width:0;padding:10px 12px;border:1px solid #DCD2BE;border-radius:6px;font-size:14px;"></input>
+          <input value="{{ c.role }}" onChange="{{ app.onCredit }}" data-i="{{ c.i }}" data-f="role" placeholder="Role" style="flex:2 1 180px;min-width:0;padding:10px 12px;border:1px solid #DCD2BE;border-radius:6px;font-size:14px;"></input>
+          <input value="{{ c.year }}" onChange="{{ app.onCredit }}" data-i="{{ c.i }}" data-f="year" placeholder="Year" style="flex:0 1 90px;min-width:0;padding:10px 12px;border:1px solid #DCD2BE;border-radius:6px;font-size:14px;"></input>
+          <button onClick="{{ app.removeCredit }}" data-i="{{ c.i }}" title="Remove" style="background:none;border:none;color:#6B6152;cursor:pointer;font-size:18px;padding:0 6px;">×</button>
+        </div>
+      </sc-for>
+      <sc-if value="{{ noCredits }}"><div style="font-size:14px;color:#6B6152;border:1px dashed #DCD2BE;border-radius:10px;padding:16px;">No credits yet. That is fine for new performers.</div></sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasSlots }}">
+    <div style="display:flex;flex-direction:column;gap:22px;">
+      <sc-if value="{{ showAdminNote }}">
+        <div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;font-size:13px;color:#6B6152;border-bottom:1px solid #E6DDCB;padding-bottom:12px;">
+          <span>Requirements for <strong style="font-weight:500;color:#1E1A14;">{{ app.roleCfg.name }}</strong> are set by the Canada Casting Studio casting team.</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;">UPDATED {{ updated }}</span>
+        </div>
+      </sc-if>
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:15px;font-weight:500;">{{ g.title }}</span>
+            <span style="font-size:13px;color:#6B6152;">{{ g.note }}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;">
+            <sc-for list="{{ g.slots }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;border:1px solid {{ s.bd }};border-radius:10px;background:#fff;overflow:hidden;">
+                <div style="aspect-ratio:{{ s.ratio }};background:{{ s.thumbBg }};background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #EFE7D6;position:relative;">
+                  <sc-if value="{{ s.empty }}"><span style="font-size:13px;color:#8A7F6B;text-align:center;padding:10px;">{{ s.emptyText }}</span></sc-if>
+                  <sc-if value="{{ s.fakeFile }}"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6B6152;padding:4px 8px;background:rgba(255,255,255,.8);border-radius:4px;">{{ s.kindLabel }}</span></sc-if>
+                  <sc-if value="{{ s.has }}"><span style="position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:#2E6443;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">✓</span></sc-if>
+                </div>
+                <div style="padding:12px;display:flex;flex-direction:column;gap:6px;flex:1;">
+                  <div style="font-size:14px;font-weight:500;line-height:1.35;">{{ s.label }}</div>
+                  <sc-if value="{{ s.hint }}"><div style="font-size:12px;color:#6B6152;line-height:1.4;">{{ s.hint }}</div></sc-if>
+                  <sc-if value="{{ s.has }}"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6B6152;word-break:break-all;">{{ s.fileName }} · {{ s.fileSize }}</div></sc-if>
+                  <div style="flex:1;"></div>
+                  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:13px;">
+                    <label style="cursor:pointer;color:#8C6418;text-decoration:underline;text-underline-offset:3px;">{{ s.uploadLabel }}<input type="file" accept="{{ s.accept }}" onChange="{{ app.onUpload }}" data-scope="{{ s.scope }}" data-slot="{{ s.id }}" style="display:none;"></input></label>
+                    <sc-if value="{{ s.has }}"><button onClick="{{ app.onRemove }}" data-scope="{{ s.scope }}" data-slot="{{ s.id }}" style="background:none;border:none;padding:0;color:#6B6152;cursor:pointer;font-size:13px;">Remove</button></sc-if>
+                    <sc-if value="{{ s.empty }}"><button onClick="{{ app.onSample }}" data-scope="{{ s.scope }}" data-slot="{{ s.id }}" style="background:none;border:none;padding:0;color:#A39985;cursor:pointer;font-size:12px;">Use sample</button></sc-if>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasDecls }}">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:13px;font-weight:500;letter-spacing:.06em;color:#6B6152;">DECLARATIONS</div>
+      <sc-for list="{{ decls }}" as="d" hint-placeholder-count="3">
+        <label style="display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #E6DDCB;border-radius:10px;padding:14px;cursor:pointer;font-size:14px;line-height:1.5;">
+          <input type="checkbox" checked="{{ d.on }}" onChange="{{ app.onField }}" data-k="{{ d.k }}" style="width:18px;height:18px;margin:2px 0 0;accent-color:#1E1A14;flex:none;"></input>
+          <span>{{ d.label }}</span>
+        </label>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isReview }}">
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <sc-for list="{{ review }}" as="r" hint-placeholder-count="6">
+        <div style="background:#fff;border:1px solid {{ r.bd }};border-radius:12px;padding:18px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+              <span style="font-family:'Cinzel',serif;font-size:12px;color:#8C6418;">{{ r.n }}</span>
+              <span style="font-size:17px;font-weight:500;">{{ r.title }}</span>
+              <sc-if value="{{ r.common }}"><span style="font-size:11px;color:#6B6152;border:1px solid #E6DDCB;border-radius:999px;padding:2px 8px;">Main profile</span></sc-if>
+            </div>
+            <button onClick="{{ app.toStep }}" data-step="{{ r.i }}" style="background:none;border:1px solid #CFC4AD;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;">Edit</button>
+          </div>
+          <sc-if value="{{ r.hasMissing }}"><div style="font-size:13px;color:#9A3F24;background:#F6E4DE;border-radius:6px;padding:8px 10px;margin-bottom:12px;">Still needed: {{ r.missingText }}</div></sc-if>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 20px;">
+            <sc-for list="{{ r.rows }}" as="x">
+              <div style="min-width:0;">
+                <div style="font-size:12px;color:#6B6152;">{{ x.l }}</div>
+                <div style="font-size:14px;line-height:1.45;overflow-wrap:anywhere;">{{ x.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ r.hasMedia }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;">
+              <sc-for list="{{ r.media }}" as="m">
+                <span style="font-size:12px;padding:5px 10px;border-radius:999px;background:{{ m.bg }};color:{{ m.fg }};">{{ m.mark }} {{ m.label }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <div style="background:#F4EEE1;border:1px solid #E6DDCB;border-radius:12px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:15px;font-weight:500;">{{ app.roleCfg.name }} · 1-year registration</div>
+          <div style="font-size:13px;color:#6B6152;">Fee CAD $100 + tax for {{ app.taxes.province }}. Payment is next.</div>
+        </div>
+        <div style="font-size:20px;font-weight:500;">{{ app.taxes.total }}</div>
+      </div>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid {{ confirmBd }};border-radius:10px;padding:16px;cursor:pointer;font-size:15px;line-height:1.5;">
+        <input type="checkbox" checked="{{ app.role.confirm }}" onChange="{{ app.toggleConfirm }}" style="width:18px;height:18px;margin:3px 0 0;accent-color:#1E1A14;flex:none;"></input>
+        <span>I confirm the information in this registration is accurate and belongs to me.</span>
+      </label>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.app || {}, C = a.cfg;
+    if (!C) return { fields:[], groups:[], decls:[], review:[], credits:[] };
+    const key = this.props.stepKey || (a.step && a.step.key) || 'personal';
+    const idx = C.steps.findIndex(s => s.key === key), meta = a.steps[idx] || {};
+    const empty = v => v == null || v === '' || (Array.isArray(v) && !v.length);
+    const basis = { half:'240px', third:'160px', full:'100%' };
+    const fields = a.fieldsFor(key).map(f => {
+      const v = a.getVal(f.k), t = f.type || 'text';
+      const miss = f.req && empty(v) && meta.state === 'partial';
+      const sel = Array.isArray(v) ? v : [];
+      return { k:f.k, label:f.label, req:!!f.req, hint:f.hint || '', basis:basis[f.b || 'half'], value:v == null ? '' : v,
+        isInput:['text','date','tel','email'].includes(t), inputType:t, isSelect:t === 'select', isTextarea:t === 'textarea', isChips:t === 'chips',
+        bd:miss ? '#C9785C' : '#DCD2BE',
+        options:(f.options || []).map(o => ({ v:o, bg:sel.includes(o) ? '#1E1A14' : '#fff', fg:sel.includes(o) ? '#FBF8F1' : '#1E1A14', bd:sel.includes(o) ? '#1E1A14' : '#DCD2BE' })) };
+    });
+    const ratio = { photo:'4 / 5', video:'16 / 10', document:'16 / 10' };
+    const accept = { photo:'image/*', video:'video/*', document:'image/*,application/pdf' };
+    const slots = a.slotsFor(key).map(s => {
+      const scope = s.scope || 'r', m = scope === 'p' ? (a.profile.media || {}) : a.role.media, file = m[s.id];
+      const url = file && file.url;
+      return { ...s, scope, has:!!file, empty:!file, fakeFile:!!file && !url, fileName:file ? file.name : '', fileSize:file ? file.size : '',
+        ratio:ratio[s.kind], accept:accept[s.kind], kindLabel:s.kind.toUpperCase(),
+        emptyText:'+ Upload ' + (s.kind === 'document' ? 'document' : s.kind),
+        uploadLabel:file ? 'Replace' : 'Upload',
+        thumbBg:url ? "url('" + url + "')" : file ? 'repeating-linear-gradient(135deg,#EFE7D6 0 10px,#F6F0E3 10px 20px)' : '#FBF8F1',
+        bd:!file && s.level === 'required' && meta.state === 'partial' ? '#C9785C' : '#E6DDCB' };
+    });
+    const lv = { required:['Required','Needed before you can submit'], recommended:['Recommended','Profiles with these get more contact from casting'], optional:['Optional','Add if you have them'] };
+    const groups = ['required','recommended','optional'].map(l => ({ title:lv[l][0], note:lv[l][1], slots:slots.filter(s => s.level === l) })).filter(g => g.slots.length);
+    const decls = a.declsFor(key).map(d => ({ ...d, on:!!a.getVal(d.k) }));
+    const credits = ((a.role.data && a.role.data.credits) || []).map((c, i) => ({ ...c, i }));
+    const fmt = v => Array.isArray(v) ? (v.length ? v.join(', ') : '—') : (v === true ? 'Yes' : empty(v) ? '—' : String(v));
+    const review = key !== 'review' ? [] : C.steps.slice(0, 6).map((st, i) => {
+      const m = a.steps[i];
+      let rows = a.fieldsFor(st.key).map(f => ({ l:f.label, v:f.k === 'p.idNumber' && a.getVal(f.k) ? '•••••' + String(a.getVal(f.k)).slice(-3) : fmt(a.getVal(f.k)) }));
+      if (st.key === 'contact') rows = [{ l:'Email', v:(a.profile.email || '—') + (a.profile.emailVerified ? ' · verified' : ' · not verified') }, { l:'Mobile', v:(a.profile.phone || '—') + (a.profile.phoneVerified ? ' · verified' : ' · not verified') }, ...rows];
+      if (st.key === 'experience') rows.push({ l:'Credits', v:((a.role.data.credits || []).filter(c => c.production).map(c => c.production + (c.year ? ' (' + c.year + ')' : '')).join('; ')) || '—' });
+      if (st.key === 'legal') rows.push({ l:'Declarations', v:a.declsFor('legal').every(d => a.getVal(d.k)) ? 'All accepted' : 'Incomplete' });
+      const media = a.slotsFor(st.key).map(s => { const mm = (s.scope === 'p' ? (a.profile.media || {}) : a.role.media)[s.id]; return { label:s.label, mark:mm ? '✓' : s.level === 'required' ? '!' : '–', bg:mm ? '#E4F0E7' : s.level === 'required' ? '#F6E4DE' : '#F4EEE1', fg:mm ? '#2E6443' : s.level === 'required' ? '#9A3F24' : '#6B6152' }; });
+      return { i, n:m.n, title:st.title, common:st.common, rows:rows.filter(r => r.v !== '—' || true), media, hasMedia:media.length > 0, hasMissing:m.missCount > 0, missingText:m.missing.join(', '), bd:m.missCount ? '#E3B8A6' : '#E6DDCB' };
+    });
+    const p = a.profile || {};
+    return {
+      reused:!!meta.reused, isContact:key === 'contact', isExperience:key === 'experience', isReview:key === 'review',
+      emailOk:!!p.emailVerified, emailNo:!p.emailVerified, phoneOk:!!p.phoneVerified, showSend:!p.phoneVerified && !(a.otp && a.otp.sent), otpSent:!p.phoneVerified && !!(a.otp && a.otp.sent),
+      fields, hasFields:fields.length > 0, slots, groups, hasSlots:slots.length > 0, showAdminNote:key !== 'legal', updated:(a.req && a.req.updated || '').toUpperCase(),
+      decls, hasDecls:decls.length > 0, credits, noCredits:!credits.length, review,
+      confirmBd:a.role && a.role.confirm ? '#C8942A' : '#E6DDCB'
+    };
+  }
+}
+</script>
+</body>
+</html>

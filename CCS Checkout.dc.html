@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="min-height:100%;background:{{ pageBg }};color:#1E1A14;font-family:'Jost',sans-serif;">
+  <sc-if value="{{ notActivated }}" hint-placeholder-val="{{ true }}">
+    <header style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:{{ headPad }};border-bottom:1px solid #E6DDCB;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="assets/ccs-mark.png" alt="" style="height:30px;width:auto;"></img>
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Cinzel',serif;font-weight:600;font-size:14px;letter-spacing:.12em;">CANADA CASTING STUDIO</span></sc-if>
+      </div>
+      <sc-if value="{{ isPayment }}"><button onClick="{{ app.nav }}" data-to="onboard" style="background:none;border:none;color:#6B6152;cursor:pointer;font-size:14px;">← Back to review</button></sc-if>
+      <sc-if value="{{ notPayment }}"><button onClick="{{ app.logout }}" style="background:none;border:1px solid #DCD2BE;border-radius:6px;padding:8px 12px;cursor:pointer;font-size:13px;">Log out</button></sc-if>
+    </header>
+  </sc-if>
+
+  <sc-if value="{{ isPayment }}" hint-placeholder-val="{{ true }}">
+    <section style="max-width:1040px;margin:0 auto;padding:{{ pad }};">
+      <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:.22em;color:#8C6418;margin-bottom:10px;">PAYMENT</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 28px;">{{ app.roleCfg.name }}, 1-year registration</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;">
+        <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+          <sc-if value="{{ failed }}">
+            <div style="background:#F6E4DE;border:1px solid #E3B8A6;border-radius:12px;padding:18px 20px;">
+              <div style="font-size:16px;font-weight:500;color:#9A3F24;margin-bottom:4px;">Payment failed</div>
+              <div style="font-size:14px;line-height:1.55;color:#6E3320;margin-bottom:14px;">Your card was declined and nothing was charged. Your registration details are saved, so you only need to try the payment again.</div>
+              <button onClick="{{ app.retryPay }}" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:11px 18px;font-size:14px;cursor:pointer;">Retry payment</button>
+            </div>
+          </sc-if>
+          <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:{{ cardPad }};display:flex;flex-direction:column;gap:16px;">
+            <div style="font-size:17px;font-weight:500;">Card details</div>
+            <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">Name on card<input placeholder="Priya Anand" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;"></input></label>
+            <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">Card number<input placeholder="4242 4242 4242 4242" inputMode="numeric" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;font-family:'JetBrains Mono',monospace;"></input></label>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;">
+              <label style="flex:1 1 120px;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">Expiry<input placeholder="MM / YY" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;"></input></label>
+              <label style="flex:1 1 100px;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">CVC<input placeholder="123" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;"></input></label>
+              <label style="flex:1 1 120px;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#4A4234;">Postal code<input value="{{ app.profile.postal }}" onChange="{{ app.onField }}" data-k="p.postal" style="padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:15px;font-weight:400;"></input></label>
+            </div>
+            <button onClick="{{ payAction }}" style="margin-top:6px;background:{{ payBg }};color:#FBF8F1;border:none;border-radius:6px;padding:16px;font-size:16px;font-weight:500;cursor:pointer;display:flex;gap:10px;align-items:center;justify-content:center;">
+              <sc-if value="{{ processing }}"><span style="width:16px;height:16px;border-radius:50%;border:2px solid rgba(251,248,241,.35);border-top-color:#FBF8F1;animation:ccsSpin .8s linear infinite;"></span></sc-if>
+              <span>{{ payLabel }}</span>
+            </button>
+            <div style="font-size:12px;color:#6B6152;text-align:center;">Payments are encrypted. You will receive a receipt by email.</div>
+          </div>
+          <label style="display:flex;gap:10px;align-items:center;border:1px dashed #CFC4AD;border-radius:10px;padding:12px 14px;font-size:13px;color:#6B6152;cursor:pointer;">
+            <input type="checkbox" checked="{{ app.pay.failNext }}" onChange="{{ app.toggleFail }}" style="accent-color:#1E1A14;"></input>
+            <span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8C6418;">PROTOTYPE</span> Simulate a declined card</span>
+          </label>
+        </div>
+        <aside style="flex:1 1 320px;min-width:0;background:#F4EEE1;border:1px solid #E6DDCB;border-radius:14px;padding:{{ cardPad }};">
+          <div style="font-size:17px;font-weight:500;margin-bottom:18px;">Summary</div>
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;">
+            <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#6B6152;">Role</span><span style="text-align:right;">{{ app.roleCfg.name }}</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#6B6152;">Registration period</span><span style="text-align:right;">12 months from activation</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#6B6152;">Estimated dates</span><span style="text-align:right;">25 Sep 2026 – 24 Sep 2027</span></div>
+            <div style="height:1px;background:#E6DDCB;margin:4px 0;"></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#6B6152;">Registration fee</span><span>{{ app.taxes.fee }}</span></div>
+            <sc-for list="{{ app.taxes.lines }}" as="t" hint-placeholder-count="1">
+              <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#6B6152;">{{ t.label }}</span><span>{{ t.amt }}</span></div>
+            </sc-for>
+            <div style="height:1px;background:#1E1A14;margin:4px 0;"></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;font-size:18px;font-weight:500;"><span>Total</span><span>{{ app.taxes.total }}</span></div>
+            <div style="font-size:12px;color:#6B6152;line-height:1.5;">Tax calculated for {{ app.taxes.province }}, from your personal information.</div>
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:6px;"><span style="color:#6B6152;">Payment status</span><span style="font-size:12px;padding:4px 10px;border-radius:999px;background:{{ statusBg }};color:{{ statusFg }};">{{ statusLabel }}</span></div>
+          </div>
+          <div style="margin-top:20px;border-top:1px solid #E6DDCB;padding-top:14px;font-size:12px;line-height:1.55;color:#6B6152;">This fee covers one year of profile registration and visibility to casting professionals. It does not guarantee a role, booking or employment.</div>
+        </aside>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isSubmitted }}">
+    <section style="max-width:640px;margin:0 auto;padding:{{ pad }};">
+      <div style="width:60px;height:60px;border-radius:50%;background:#E4F0E7;color:#2E6443;font-size:26px;display:flex;align-items:center;justify-content:center;margin-bottom:22px;">✓</div>
+      <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:.22em;color:#8C6418;margin-bottom:10px;">PAYMENT SUCCESSFUL</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 12px;">Registration submitted</h1>
+      <p style="font-size:16px;line-height:1.6;color:#6B6152;margin:0 0 26px;">We have received your {{ app.roleCfg.name }} registration and payment. Your profile now moves to verification.</p>
+      <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:6px 20px;">
+        <sc-for list="{{ receipt }}" as="r" hint-placeholder-count="5">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;padding:14px 0;border-bottom:1px solid #EFE7D6;font-size:14px;">
+            <span style="color:#6B6152;">{{ r.l }}</span><span style="font-family:{{ r.font }};text-align:right;">{{ r.v }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <button onClick="{{ app.nav }}" data-to="verifying" style="margin-top:24px;background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:15px 26px;font-size:15px;font-weight:500;cursor:pointer;">View verification status</button>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isVerifying }}">
+    <section style="max-width:680px;margin:0 auto;padding:{{ pad }};">
+      <div style="display:inline-flex;gap:8px;align-items:center;font-size:13px;color:#2F5577;background:#EAF0F6;border-radius:999px;padding:6px 12px;margin-bottom:20px;"><span style="width:12px;height:12px;border-radius:50%;border:2px solid #9CB6CE;border-top-color:#2F5577;animation:ccsSpin 1.2s linear infinite;"></span>Verification in progress</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 12px;">We are verifying your profile.</h1>
+      <p style="font-size:16px;line-height:1.6;color:#6B6152;margin:0 0 30px;">Our team checks your identification and makes sure your media meets the {{ app.roleCfg.name }} requirements. This usually takes 1–2 business days. It is a profile check, not a casting decision.</p>
+      <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:24px;">
+        <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="5">
+          <div style="display:flex;gap:16px;">
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <span style="width:26px;height:26px;border-radius:50%;flex:none;background:{{ t.bg }};color:{{ t.fg }};border:1px solid {{ t.bd }};font-size:12px;display:flex;align-items:center;justify-content:center;">{{ t.mark }}</span>
+              <sc-if value="{{ t.line }}"><span style="width:1px;flex:1;min-height:22px;background:#E6DDCB;"></span></sc-if>
+            </div>
+            <div style="padding:2px 0 20px;">
+              <div style="font-size:15px;font-weight:{{ t.w }};color:{{ t.ink }};">{{ t.t }}</div>
+              <div style="font-size:13px;color:#6B6152;margin-top:2px;">{{ t.d }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;font-size:14px;color:#6B6152;justify-content:space-between;">
+        <span>Application <span style="font-family:'JetBrains Mono',monospace;color:#1E1A14;">{{ app.role.appId }}</span></span>
+        <span>We will email {{ app.profile.email }} when it is done.</span>
+      </div>
+      <button onClick="{{ app.approve }}" style="margin-top:28px;background:none;border:1px dashed #CFC4AD;border-radius:8px;padding:12px 16px;font-size:13px;cursor:pointer;color:#6B6152;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8C6418;">PROTOTYPE</span>  Simulate verification complete</button>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isActivated }}">
+    <section style="min-height:{{ actH }};display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;">
+      <img src="assets/ccs-mark.png" alt="" style="height:{{ markH }};width:auto;margin-bottom:28px;filter:drop-shadow(0 20px 40px rgba(200,148,42,.35));"></img>
+      <div style="font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;color:#8C6418;margin-bottom:14px;">PROFILE ACTIVATED</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 12px;max-width:640px;">Your {{ app.roleCfg.name }} profile is live.</h1>
+      <p style="font-size:16px;line-height:1.6;color:#6B6152;margin:0 0 34px;">Visible to casting professionals until {{ expiry }}.</p>
+      <div style="width:240px;height:3px;background:#E6DDCB;border-radius:2px;overflow:hidden;margin-bottom:14px;"><div style="height:100%;width:{{ cdPct }};background:#C8942A;transition:width 1s linear;"></div></div>
+      <div style="font-size:14px;color:#6B6152;margin-bottom:18px;">Taking you to your dashboard in {{ app.count }}…</div>
+      <button onClick="{{ app.skipCountdown }}" style="background:none;border:none;color:#8C6418;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px;">Go now</button>
+    </section>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.app || {}, sc = a.screen || 'payment', n = !!a.narrow, pay = a.pay || {}, role = a.role || {};
+    const st = pay.status || 'idle';
+    const statusMap = { idle:['Awaiting payment','#FBF1DC','#8C5A10'], processing:['Processing','#EAF0F6','#2F5577'], failed:['Failed','#F6E4DE','#9A3F24'], success:['Paid','#E4F0E7','#2E6443'] };
+    const sm = statusMap[st];
+    const total = (a.taxes && a.taxes.total) || '';
+    const tl = [
+      ['Registration submitted','Received 25 Sep 2026','done'],
+      ['Payment received',total + ' · Visa ending 4242','done'],
+      ['Profile verification','In progress · usually 1–2 business days','cur'],
+      ['Profile activation','Your 12-month registration starts here','todo'],
+      ['Visible to casting','Casting professionals can find and contact you','todo']
+    ].map(([t, d, s], i, arr) => ({ t, d, line:i < arr.length - 1, mark:s === 'done' ? '✓' : String(i + 1), bg:s === 'done' ? '#2E6443' : s === 'cur' ? '#1E1A14' : '#fff', fg:s === 'todo' ? '#8A7F6B' : '#fff', bd:s === 'done' ? '#2E6443' : s === 'cur' ? '#1E1A14' : '#D6CCB7', w:s === 'cur' ? 500 : 400, ink:s === 'todo' ? '#6B6152' : '#1E1A14' }));
+    const mono = "'JetBrains Mono',monospace", sans = "'Jost',sans-serif";
+    return {
+      app:a, wide:!n, pageBg:sc === 'activated' ? '#FFFDF7' : '#FBF8F1', notActivated:sc !== 'activated',
+      headPad:n ? '12px 16px' : '14px 32px', pad:n ? '28px 16px 110px' : '56px 40px 120px', cardPad:n ? '20px' : '28px', h1:n ? '34px' : '48px',
+      isPayment:sc === 'payment', notPayment:sc !== 'payment', isSubmitted:sc === 'submitted', isVerifying:sc === 'verifying', isActivated:sc === 'activated',
+      failed:st === 'failed', processing:st === 'processing',
+      payLabel:st === 'processing' ? 'Processing payment…' : 'Pay ' + total, payBg:st === 'processing' ? '#6B6152' : '#1E1A14',
+      payAction:st === 'processing' ? (() => {}) : a.payNow,
+      statusLabel:sm[0], statusBg:sm[1], statusFg:sm[2],
+      receipt:[
+        { l:'Application ID', v:role.appId || '—', font:mono },
+        { l:'Role', v:(a.roleCfg && a.roleCfg.name) || '', font:sans },
+        { l:'Payment', v:total + ' · paid 25 Sep 2026', font:sans },
+        { l:'Registration period', v:'12 months from activation', font:sans },
+        { l:'Status', v:'Verification pending', font:sans }
+      ],
+      timeline:tl, expiry:a.fmtDate ? a.fmtDate(role.expiry) : '',
+      actH:n ? '760px' : 'calc(100vh - 0px)', markH:n ? '140px' : '200px', cdPct:Math.round(((5 - (a.count || 0)) / 5) * 100) + '%'
+    };
+  }
+}
+</script>
+</body>
+</html>

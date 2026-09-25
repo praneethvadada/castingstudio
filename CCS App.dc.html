@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="min-height:100%;background:#FBF8F1;color:#1E1A14;font-family:'Jost',sans-serif;display:flex;flex-direction:column;">
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:{{ headPad }};border-bottom:1px solid #E6DDCB;background:#FBF8F1;position:sticky;top:0;z-index:6;">
+    <div style="display:flex;align-items:center;gap:28px;">
+      <button onClick="{{ app.nav }}" data-to="home" style="display:flex;align-items:center;gap:10px;background:none;border:none;padding:0;cursor:pointer;">
+        <img src="assets/ccs-mark.png" alt="" style="height:30px;width:auto;"></img>
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Cinzel',serif;font-weight:600;font-size:14px;letter-spacing:.12em;color:#1E1A14;white-space:nowrap;">CANADA CASTING STUDIO</span></sc-if>
+      </button>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;gap:4px;">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ app.nav }}" data-to="{{ t.to }}" style="position:relative;background:{{ t.bg }};border:none;border-radius:6px;padding:8px 12px;font-size:14px;color:{{ t.fg }};cursor:pointer;display:flex;gap:6px;align-items:center;white-space:nowrap;">{{ t.l }}<sc-if value="{{ t.badge }}"><span style="min-width:18px;height:18px;border-radius:9px;background:#C8942A;color:#1E1A14;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;">{{ t.badge }}</span></sc-if></button>
+          </sc-for>
+        </nav>
+      </sc-if>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="width:34px;height:34px;border-radius:50%;background:#1E1A14;color:#F2D38A;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;">{{ initials }}</span>
+      <button onClick="{{ app.logout }}" style="background:none;border:1px solid #DCD2BE;border-radius:6px;padding:7px 11px;cursor:pointer;font-size:13px;">Log out</button>
+    </div>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1160px;margin:0 auto;padding:{{ pad }};">
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{ pending }}" as="p">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:#FBF1DC;border:1px solid #EBD3A0;border-radius:12px;padding:14px 18px;margin-bottom:20px;">
+          <span style="font-size:14px;">{{ p.text }}</span>
+          <button onClick="{{ app.continueRole }}" data-role="{{ p.key }}" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:9px 14px;font-size:13px;cursor:pointer;">{{ p.cta }}</button>
+        </div>
+      </sc-for>
+      <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:28px;">
+        <div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 6px;">Good afternoon, {{ first }}.</h1>
+          <div style="display:flex;gap:8px;align-items:center;font-size:14px;color:#2E6443;"><span style="width:8px;height:8px;border-radius:50%;background:#2E6443;"></span>{{ visibleLine }}</div>
+        </div>
+        <button onClick="{{ app.nav }}" data-to="registerAs" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:12px 18px;font-size:14px;font-weight:500;cursor:pointer;">+ Register another role</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;">
+        <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:84px;height:104px;border-radius:8px;flex:none;background:{{ headshotBg }};background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding:6px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#8A7F6B;">{{ headshotLabel }}</div>
+            <div style="min-width:0;">
+              <div style="font-size:20px;font-weight:500;">{{ fullName }}</div>
+              <div style="font-size:13px;color:#6B6152;margin:2px 0 10px;">{{ subline }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ activeRoles }}" as="r"><span style="font-size:12px;padding:3px 9px;border-radius:999px;background:#E4F0E7;color:#2E6443;white-space:nowrap;">{{ r.name }}</span></sc-for>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>Profile completion</span><span style="font-weight:500;">{{ completion }}</span></div>
+            <div style="height:6px;background:#EFE7D6;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ completion }};background:#C8942A;"></div></div>
+            <div style="font-size:12px;color:#6B6152;margin-top:8px;line-height:1.45;">{{ completionHint }}</div>
+          </div>
+          <button onClick="{{ app.updateRole }}" data-role="{{ app.current }}" style="align-self:flex-start;background:none;border:1px solid #CFC4AD;border-radius:6px;padding:9px 14px;font-size:13px;cursor:pointer;">Update profile media</button>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:17px;font-weight:500;">Registrations</span><button onClick="{{ app.nav }}" data-to="registrations" style="background:none;border:none;color:#8C6418;font-size:13px;cursor:pointer;padding:0;">Manage</button></div>
+          <sc-for list="{{ myRegs }}" as="r" hint-placeholder-count="2">
+            <div style="border-top:1px solid #EFE7D6;padding-top:12px;">
+              <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px;">
+                <span style="font-size:15px;">{{ r.name }}</span>
+                <span style="font-size:12px;padding:3px 9px;border-radius:999px;background:{{ r.bg }};color:{{ r.fg }};">{{ r.status }}</span>
+              </div>
+              <div style="font-size:12px;color:#6B6152;margin-bottom:8px;">{{ r.validity }}</div>
+              <sc-if value="{{ r.showBar }}"><div style="height:4px;background:#EFE7D6;border-radius:2px;overflow:hidden;"><div style="height:100%;width:{{ r.left }};background:#2E6443;"></div></div></sc-if>
+              <sc-if value="{{ r.canRenew }}"><button onClick="{{ app.renew }}" data-role="{{ r.key }}" style="background:none;border:none;color:#8C6418;text-decoration:underline;cursor:pointer;padding:0;font-size:13px;">Renew for CAD $100 + tax</button></sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;"><span style="font-size:17px;font-weight:500;">Casting calls for you</span><button onClick="{{ app.nav }}" data-to="casting" style="background:none;border:none;color:#8C6418;font-size:13px;cursor:pointer;padding:0;">View all</button></div>
+          <sc-for list="{{ homeCasts }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ app.openCast }}" data-id="{{ c.id }}" style="display:flex;flex-direction:column;gap:3px;text-align:left;background:none;border:none;border-top:1px solid #EFE7D6;padding:12px 0;cursor:pointer;color:#1E1A14;">
+              <span style="font-size:12px;color:#8C6418;">{{ c.production }} · {{ c.type }}</span>
+              <span style="font-size:15px;">{{ c.title }}</span>
+              <span style="font-size:12px;color:#6B6152;">{{ c.location }} · Apply by {{ c.deadline }}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ noHomeCasts }}"><div style="font-size:14px;color:#6B6152;">New calls for your roles appear here.</div></sc-if>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E6DDCB;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;"><span style="font-size:17px;font-weight:500;">Messages</span><button onClick="{{ app.nav }}" data-to="messages" style="background:none;border:none;color:#8C6418;font-size:13px;cursor:pointer;padding:0;">Open inbox</button></div>
+          <sc-for list="{{ threadsView }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ app.openThreadGo }}" data-id="{{ t.id }}" style="display:flex;gap:10px;text-align:left;background:none;border:none;border-top:1px solid #EFE7D6;padding:12px 0;cursor:pointer;color:#1E1A14;">
+              <span style="width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:{{ t.dot }};"></span>
+              <span style="min-width:0;display:flex;flex-direction:column;gap:2px;">
+                <span style="font-size:14px;font-weight:{{ t.w }};">{{ t.from }}</span>
+                <span style="font-size:13px;color:#6B6152;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ t.preview }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#6B6152;margin:28px 0 0;line-height:1.55;max-width:720px;">Your registration keeps your profile visible to casting professionals. Casting decisions and selection are made by productions.</p>
+    </sc-if>
+
+    <sc-if value="{{ isRegs }}">
+      <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 8px;">My registrations</h1>
+      <p style="font-size:15px;color:#6B6152;margin:0 0 26px;line-height:1.55;max-width:640px;">Each role is registered separately for 12 months. Your personal, contact and legal details are shared across all of them.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <sc-for list="{{ allRegs }}" as="r" hint-placeholder-count="5">
+          <div style="background:{{ r.cardBg }};border:1px solid #E6DDCB;border-radius:12px;padding:20px 22px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;">
+            <div style="flex:1 1 220px;min-width:0;">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:4px;">
+                <span style="font-size:18px;font-weight:500;">{{ r.name }}</span>
+                <span style="font-size:12px;padding:3px 9px;border-radius:999px;background:{{ r.bg }};color:{{ r.fg }};">{{ r.status }}</span>
+              </div>
+              <div style="font-size:13px;color:#6B6152;">{{ r.profileStatus }}</div>
+            </div>
+            <div style="flex:2 1 320px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;font-size:13px;">
+              <div><div style="color:#6B6152;font-size:12px;">Registered</div><div>{{ r.regDate }}</div></div>
+              <div><div style="color:#6B6152;font-size:12px;">Expires</div><div>{{ r.expiry }}</div></div>
+              <div><div style="color:#6B6152;font-size:12px;">Media</div><div>{{ r.media }}</div></div>
+            </div>
+            <div style="flex:0 0 auto;display:flex;gap:8px;flex-wrap:wrap;">
+              <button onClick="{{ r.action }}" data-role="{{ r.key }}" style="background:{{ r.btnBg }};color:{{ r.btnFg }};border:1px solid #1E1A14;border-radius:6px;padding:10px 14px;font-size:13px;cursor:pointer;white-space:nowrap;">{{ r.cta }}</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCasting }}">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:24px;">
+        <div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 6px;">Casting calls</h1>
+          <p style="font-size:15px;color:#6B6152;margin:0;">Open requirements posted by verified casting professionals.</p>
+        </div>
+        <div style="display:flex;background:#F4EEE1;border-radius:8px;padding:3px;">
+          <sc-for list="{{ filters }}" as="f">
+            <button onClick="{{ app.setCastFilter }}" data-v="{{ f.v }}" style="border:none;border-radius:6px;padding:8px 14px;font-size:13px;cursor:pointer;background:{{ f.bg }};color:#1E1A14;">{{ f.l }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;">
+        <sc-for list="{{ casts }}" as="c" hint-placeholder-count="4">
+          <button onClick="{{ app.openCast }}" data-id="{{ c.id }}" style="display:flex;flex-direction:column;gap:10px;text-align:left;background:#fff;border:1px solid #E6DDCB;border-radius:12px;padding:20px;cursor:pointer;color:#1E1A14;" style-hover="border-color:#C8942A;">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">
+              <span style="font-size:12px;color:#8C6418;">{{ c.production }} · {{ c.type }}</span>
+              <span style="font-size:11px;padding:3px 8px;border-radius:999px;background:{{ c.tagBg }};color:{{ c.tagFg }};white-space:nowrap;">{{ c.tag }}</span>
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;line-height:1.15;">{{ c.title }}</span>
+            <span style="font-size:14px;color:#6B6152;line-height:1.5;">{{ c.summary }}</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:#4A4234;border-top:1px solid #EFE7D6;padding-top:10px;">
+              <span>{{ c.roleName }}</span><span>{{ c.location }}</span><span>Age {{ c.age }}</span><span>{{ c.dates }}</span>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ noCasts }}"><div style="border:1px dashed #DCD2BE;border-radius:12px;padding:28px;color:#6B6152;font-size:14px;">No open calls for your roles right now.</div></sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}">
+      <button onClick="{{ app.nav }}" data-to="casting" style="background:none;border:none;padding:0;color:#6B6152;cursor:pointer;font-size:14px;margin-bottom:20px;">← All casting calls</button>
+      <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;">
+        <div style="flex:2 1 460px;min-width:0;">
+          <div style="font-size:13px;color:#8C6418;margin-bottom:8px;">{{ cast.production }} · {{ cast.type }} · {{ cast.company }}</div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 14px;">{{ cast.title }}</h1>
+          <p style="font-size:16px;line-height:1.6;color:#4A4234;margin:0 0 26px;">{{ cast.summary }}</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:#E6DDCB;border:1px solid #E6DDCB;border-radius:12px;overflow:hidden;">
+            <sc-for list="{{ castMeta }}" as="m" hint-placeholder-count="8">
+              <div style="background:#fff;padding:14px 16px;"><div style="font-size:12px;color:#6B6152;margin-bottom:3px;">{{ m.l }}</div><div style="font-size:14px;line-height:1.45;">{{ m.v }}</div></div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:28px;margin-top:26px;">
+            <div style="flex:1 1 220px;"><div style="font-size:13px;font-weight:500;letter-spacing:.06em;color:#6B6152;margin-bottom:10px;">REQUIRED SKILLS</div><sc-for list="{{ castSkills }}" as="s"><div style="font-size:14px;padding:6px 0;border-bottom:1px solid #EFE7D6;">{{ s.v }}</div></sc-for></div>
+            <div style="flex:1 1 220px;"><div style="font-size:13px;font-weight:500;letter-spacing:.06em;color:#6B6152;margin-bottom:10px;">MEDIA REQUESTED</div><sc-for list="{{ castMedia }}" as="s"><div style="font-size:14px;padding:6px 0;border-bottom:1px solid #EFE7D6;">{{ s.v }}</div></sc-for></div>
+          </div>
+        </div>
+        <aside style="flex:1 1 280px;min-width:0;background:#F4EEE1;border:1px solid #E6DDCB;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:12px;">
+          <div style="font-size:13px;color:#6B6152;">Apply by</div>
+          <div style="font-size:22px;font-weight:500;">{{ cast.deadline }}</div>
+          <sc-if value="{{ canInterest }}">
+            <button onClick="{{ app.interest }}" data-id="{{ cast.id }}" style="background:{{ intBg }};color:{{ intFg }};border:1px solid #1E1A14;border-radius:6px;padding:14px;font-size:15px;font-weight:500;cursor:pointer;">{{ intLabel }}</button>
+            <div style="font-size:12px;color:#6B6152;line-height:1.5;">Sharing interest sends your {{ cast.roleName }} profile to {{ cast.company }}. They decide who is contacted and selected.</div>
+          </sc-if>
+          <sc-if value="{{ cantInterest }}">
+            <button onClick="{{ app.pickRole }}" data-role="{{ cast.role }}" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:14px;font-size:15px;font-weight:500;cursor:pointer;">Register as {{ cast.roleName }}</button>
+            <div style="font-size:12px;color:#6B6152;line-height:1.5;">You need an active {{ cast.roleName }} registration to share interest in this call.</div>
+          </sc-if>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMessages }}">
+      <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:{{ h1 }};line-height:1.05;margin:0 0 20px;">Messages</h1>
+      <div style="display:flex;border:1px solid #E6DDCB;border-radius:14px;overflow:hidden;background:#fff;min-height:520px;">
+        <sc-if value="{{ showList }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:{{ listFlex }};min-width:0;overflow:hidden;border-right:1px solid #E6DDCB;display:flex;flex-direction:column;">
+            <sc-for list="{{ threadsView }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ app.openThread }}" data-id="{{ t.id }}" style="display:flex;gap:10px;min-width:0;width:100%;text-align:left;background:{{ t.bg }};border:none;border-bottom:1px solid #EFE7D6;padding:16px;cursor:pointer;color:#1E1A14;">
+                <span style="width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:{{ t.dot }};"></span>
+                <span style="min-width:0;display:flex;flex-direction:column;gap:2px;">
+                  <span style="font-size:14px;font-weight:{{ t.w }};">{{ t.from }}</span>
+                  <span style="font-size:12px;color:#8C6418;">{{ t.about }}</span>
+                  <span style="font-size:13px;color:#6B6152;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ t.preview }}</span>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showThread }}">
+          <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;">
+            <div style="padding:16px 20px;border-bottom:1px solid #EFE7D6;display:flex;gap:12px;align-items:center;">
+              <sc-if value="{{ narrow }}"><button onClick="{{ app.closeThread }}" style="background:none;border:none;font-size:18px;cursor:pointer;padding:0 4px;">←</button></sc-if>
+              <div><div style="font-size:16px;font-weight:500;">{{ thread.from }}</div><div style="font-size:13px;color:#6B6152;">{{ thread.about }}</div></div>
+            </div>
+            <div style="flex:1;padding:20px;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;">
+              <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;align-items:{{ m.align }};gap:4px;">
+                  <div style="max-width:78%;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;background:{{ m.bg }};color:{{ m.fg }};border:1px solid {{ m.bd }};font-family:{{ m.font }};">{{ m.body }}</div>
+                  <span style="font-size:11px;color:#8A7F6B;">{{ m.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;padding:14px;border-top:1px solid #EFE7D6;">
+              <input value="{{ app.draft }}" onChange="{{ app.onDraft }}" placeholder="Write a reply" style="flex:1;min-width:0;padding:12px 14px;border:1px solid #DCD2BE;border-radius:6px;font-size:14px;"></input>
+              <button onClick="{{ app.send }}" style="background:#1E1A14;color:#FBF8F1;border:none;border-radius:6px;padding:0 18px;font-size:14px;cursor:pointer;">Send</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+    <div style="height:{{ bottomSpace }};"></div>
+  </main>
+
+  <sc-if value="{{ narrow }}">
+    <nav style="position:sticky;bottom:0;display:flex;background:#fff;border-top:1px solid #E6DDCB;z-index:6;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ app.nav }}" data-to="{{ t.to }}" style="flex:1;background:none;border:none;padding:12px 4px 16px;font-size:12px;color:{{ t.mfg }};font-weight:{{ t.w }};cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <span style="width:20px;height:3px;border-radius:2px;background:{{ t.bar }};"></span>{{ t.ms }}<sc-if value="{{ t.badge }}"> ({{ t.badge }})</sc-if>
+        </button>
+      </sc-for>
+    </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.app || {}, C = a.cfg;
+    if (!C) return {};
+    const n = !!a.narrow, sc = a.screen, p = a.profile || {}, roles = a.roles || {};
+    const today = new Date('2026-09-25T12:00:00');
+    const days = iso => Math.round((new Date(iso + 'T12:00:00') - today) / 864e5);
+    const SM = { none:['Not registered','#F4EEE1','#6B6152'], onboarding:['Onboarding in progress','#FBF1DC','#8C5A10'], ready:['Ready for payment','#FBF1DC','#8C5A10'], verifying:['Verification pending','#EAF0F6','#2F5577'], active:['Active','#E4F0E7','#2E6443'], expired:['Expired','#F6E4DE','#9A3F24'] };
+    const unread = (a.threads || []).filter(t => t.unread).length;
+    const tabDefs = [['home','Home','Home'],['registrations','My registrations','Roles'],['casting','Casting calls','Casting'],['messages','Messages','Inbox']];
+    const activeTab = sc === 'castingDetail' ? 'casting' : sc;
+    const tabs = tabDefs.map(([to, l, ms]) => ({ to, l, ms, bg:activeTab === to ? '#F4EEE1' : 'transparent', fg:activeTab === to ? '#1E1A14' : '#6B6152', mfg:activeTab === to ? '#1E1A14' : '#6B6152', w:activeTab === to ? 500 : 400, bar:activeTab === to ? '#C8942A' : 'transparent', badge:to === 'messages' && unread ? String(unread) : '' }));
+    const activeKeys = C.roles.filter(r => roles[r.key] && roles[r.key].status === 'active').map(r => r.key);
+    const activeRoles = C.roles.filter(r => activeKeys.includes(r.key));
+    const mediaCount = key => { const q = C.req[key], all = [...q.wardrobe, ...q.appearance, ...q.expSlots], m = roles[key].media || {}; return all.filter(s => m[s.id]).length + ' of ' + all.length; };
+    const regRow = r => {
+      const st = roles[r.key] || { status:'none' }, sm = SM[st.status] || SM.none;
+      let validity = '';
+      if (st.status === 'active') { const d = days(st.expiry); validity = 'Valid until ' + a.fmtDate(st.expiry) + ' · ' + d + ' days left'; }
+      if (st.status === 'expired') validity = 'Expired ' + a.fmtDate(st.expiry) + '. Profile hidden from casting.';
+      if (st.status === 'verifying') validity = 'Paid. Starts when your profile is verified.';
+      if (st.status === 'onboarding') validity = 'Step ' + (st.step + 1) + ' of 7';
+      if (st.status === 'ready') validity = 'Reviewed. Waiting for payment.';
+      const left = st.status === 'active' ? Math.max(0, Math.min(100, days(st.expiry) / 365 * 100)) : 0;
+      const map = { none:['Register', a.pickRole, true], onboarding:['Continue', a.continueRole, true], ready:['Pay now', a.continueRole, true], verifying:['View status', a.continueRole, false], active:['Update role info', a.updateRole, false], expired:['Renew', a.renew, true] }[st.status] || ['Register', a.pickRole, true];
+      return { key:r.key, name:r.name, status:sm[0], bg:sm[1], fg:sm[2], validity, showBar:st.status === 'active', left:left + '%', canRenew:st.status === 'expired',
+        regDate:st.regDate ? a.fmtDate(st.regDate) : '—', expiry:st.expiry ? a.fmtDate(st.expiry) : '—', media:st.status === 'none' ? '—' : mediaCount(r.key),
+        profileStatus:st.status === 'active' ? 'Visible to casting professionals' : st.status === 'expired' ? 'Hidden. Renew to make it visible again.' : st.status === 'none' ? r.blurb : 'Not yet visible to casting',
+        cta:map[0], action:map[1], btnBg:map[2] ? '#1E1A14' : '#fff', btnFg:map[2] ? '#FBF8F1' : '#1E1A14', cardBg:st.status === 'none' ? '#FFFDF8' : '#fff' };
+    };
+    const allRegs = C.roles.map(regRow);
+    const myRegs = allRegs.filter(r => roles[r.key].status !== 'none');
+    const pending = C.roles.filter(r => ['onboarding','ready','verifying'].includes(roles[r.key].status)).map(r => { const st = roles[r.key].status; return { key:r.key, text:st === 'onboarding' ? 'Your ' + r.name + ' registration is in progress.' : st === 'ready' ? 'Your ' + r.name + ' registration is ready for payment.' : 'Your ' + r.name + ' profile is being verified.', cta:st === 'onboarding' ? 'Continue' : st === 'ready' ? 'Pay now' : 'View status' }; });
+    const roleName = k => (C.roles.find(r => r.key === k) || {}).name;
+    const castsAll = C.casting.map(c => { const mine = activeKeys.includes(c.role), int = a.interested && a.interested[c.id]; return { ...c, roleName:roleName(c.role), mine, tag:int ? 'Interest sent' : mine ? 'Matches your role' : roleName(c.role), tagBg:int ? '#E4F0E7' : mine ? '#FBF1DC' : '#F4EEE1', tagFg:int ? '#2E6443' : mine ? '#8C5A10' : '#6B6152' }; });
+    const casts = a.castFilter === 'all' ? castsAll : castsAll.filter(c => c.mine);
+    const cast = castsAll.find(c => c.id === a.castOpen) || castsAll[0];
+    const threadsView = (a.threads || []).map(t => ({ ...t, preview:t.msgs[t.msgs.length - 1].body, dot:t.unread ? '#C8942A' : 'transparent', w:t.unread ? 600 : 500, bg:t.id === a.threadOpen && !n ? '#F4EEE1' : '#fff' }));
+    const thread = (a.threads || []).find(t => t.id === a.threadOpen);
+    const msgs = thread ? thread.msgs.map(m => ({ ...m, body:m.file ? 'Attachment · ' + m.body : m.body, align:m.me ? 'flex-end' : 'flex-start', bg:m.me ? '#1E1A14' : m.file ? '#F4EEE1' : '#fff', fg:m.me ? '#FBF8F1' : '#1E1A14', bd:m.me ? '#1E1A14' : '#E6DDCB', font:m.file ? "'JetBrains Mono',monospace" : "'Jost',sans-serif" })) : [];
+    // completion for current role
+    const cur = roles[a.current] || { media:{}, data:{} };
+    const fs = ['personal','contact','legal','appearance','experience'].flatMap(k => a.fieldsFor(k));
+    const sl = ['wardrobe','appearance','experience','legal'].flatMap(k => a.slotsFor(k));
+    const filled = fs.filter(f => { const v = a.getVal(f.k); return v && (!Array.isArray(v) || v.length); }).length + sl.filter(s => ((s.scope === 'p' ? p.media : cur.media) || {})[s.id]).length;
+    const pct = Math.round(filled / (fs.length + sl.length) * 100);
+    const hs = (cur.media || {}).a1 || (cur.media || {}).a3;
+    return {
+      app:{ ...a, openThreadGo:e => { a.openThread(e); a.go('messages'); } }, wide:!n, narrow:n,
+      headPad:n ? '12px 16px' : '14px 32px', pad:n ? '24px 16px 24px' : '40px 32px 110px', h1:n ? '34px' : '46px', bottomSpace:n ? '20px' : '0',
+      tabs, initials:((p.firstName || 'P')[0] + (p.lastName || 'A')[0]).toUpperCase(),
+      isHome:sc === 'home', isRegs:sc === 'registrations', isCasting:sc === 'casting', isDetail:sc === 'castingDetail', isMessages:sc === 'messages',
+      first:p.firstName || 'there', fullName:p.stageName || ((p.firstName || '') + ' ' + (p.lastName || '')),
+      subline:[p.city, p.union].filter(Boolean).join(' · '),
+      visibleLine:activeRoles.length ? 'Visible to casting as ' + activeRoles.map(r => r.name).join(', ') : 'No active registrations yet',
+      activeRoles, completion:pct + '%', completionHint:pct < 100 ? 'Add recommended and optional media to give casting a fuller picture.' : 'Everything is filled in.',
+      headshotBg:hs && hs.url ? "url('" + hs.url + "')" : 'repeating-linear-gradient(135deg,#EFE7D6 0 8px,#F6F0E3 8px 16px)', headshotLabel:hs && hs.url ? '' : 'HEADSHOT',
+      pending, myRegs, allRegs,
+      homeCasts:castsAll.filter(c => c.mine).slice(0, 3), noHomeCasts:!castsAll.some(c => c.mine),
+      filters:[['mine','For my roles'],['all','All calls']].map(([v, l]) => ({ v, l, bg:a.castFilter === v ? '#fff' : 'transparent' })),
+      casts, noCasts:!casts.length, cast,
+      castMeta:[['Role type',cast.roleName],['Age range',cast.age],['Gender',cast.gender],['Location',cast.location],['Shoot dates',cast.dates],['Union',cast.union],['Experience',cast.experience],['Appearance',cast.appearance]].map(([l, v]) => ({ l, v })),
+      castSkills:(cast.skills.length ? cast.skills : ['None specified']).map(v => ({ v })), castMedia:cast.media.map(v => ({ v })),
+      canInterest:cast.mine, cantInterest:!cast.mine,
+      intLabel:a.interested && a.interested[cast.id] ? '✓ Interest sent · Withdraw' : 'Express interest', intBg:a.interested && a.interested[cast.id] ? '#fff' : '#1E1A14', intFg:a.interested && a.interested[cast.id] ? '#1E1A14' : '#FBF8F1',
+      threadsView, thread:thread || {}, msgs, showList:!n || !thread, showThread:!!thread, listFlex:n ? '1 1 auto' : '0 0 320px'
+    };
+  }
+}
+</script>
+</body>
+</html>
